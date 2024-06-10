@@ -1,5 +1,5 @@
 import React from "react";
-import "./Gig.scss";
+import "./gig.scss";
 //import { Slider } from "infinite-react-carousel/lib";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";

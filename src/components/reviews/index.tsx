@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import newRequest from "../../apis/apiUtil";
 import Review from "../review";
-import "./Reviews.scss";
+import "./reviews.scss";
 
 type GigIdType = string | number;
 const Reviews = ({ gigId }: { gigId: GigIdType }) => {
@@ -17,7 +17,7 @@ const Reviews = ({ gigId }: { gigId: GigIdType }) => {
   });
 
   const mutation = useMutation({
-    mutationFn: (review:any) => {
+    mutationFn: (review:any) => {  
       return newRequest.post("/reviews", review);
     },
     onSuccess:()=>{
