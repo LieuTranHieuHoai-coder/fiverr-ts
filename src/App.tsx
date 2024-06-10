@@ -1,35 +1,97 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import "./app.scss";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import React from "react";
+import Navbar from "./components/navbar/index";
+import Footer from "./components/footer/index";
+import Home from "./pages/home/index";
+import Gigs from "./pages/gigs/index";
+import Gig from "./pages/gig/index";
+import Login from "./pages/login/index";
+import Register from "./pages/register/index";
+import Add from "./pages/add/index";
+import Orders from "./pages/orders/index";
+import Messages from "./pages/messages/index";
+import Message from "./pages/message/index";
+import MyGigs from "./pages/myGigs/index";
+import {
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
+import Pay from "./pages/pay/index";
+import Success from "./pages/success/index";
 function App() {
-  const [count, setCount] = useState(0)
+  const queryClient = new QueryClient();
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+  const Layout = () => {
+    return (
+      <div className="app">
+        <QueryClientProvider client={queryClient}>
+          <Navbar />
+          <Outlet />
+          <Footer />
+        </QueryClientProvider>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    );
+  };
+
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/gigs",
+          element: <Gigs />,
+        },
+        {
+          path: "/myGigs",
+          element: <MyGigs />,
+        },
+        {
+          path: "/orders",
+          element: <Orders />,
+        },
+        {
+          path: "/messages",
+          element: <Messages />,
+        },
+        {
+          path: "/message/:id",
+          element: <Message />,
+        },
+        {
+          path: "/add",
+          element: <Add />,
+        },
+        {
+          path: "/gig/:id",
+          element: <Gig />,
+        },
+        {
+          path: "/register",
+          element: <Register />,
+        },
+        {
+          path: "/login",
+          element: <Login />,
+        },
+        {
+          path: "/pay/:id",
+          element: <Pay />,
+        },
+        {
+          path: "/success",
+          element: <Success />,
+        },
+      ],
+    },
+  ]);
+
+  return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;
