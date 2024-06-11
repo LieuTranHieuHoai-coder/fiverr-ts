@@ -1,5 +1,7 @@
 export interface ThongTinNguoiDung {
   id?: string;
+  name?: string;
+  avatar?: string;
   email?: string;
   password?: string;
   phone?: string;
@@ -8,4 +10,5 @@ export interface ThongTinNguoiDung {
   role?: string;
   skill?: [];
   certification?: [];
+  bookingJob?: [];
 }
