@@ -18,7 +18,7 @@ function Navbar() {
     };
   }, []);
 
-  const currentUser = JSON.parse(localStorage.getItem("currentUser") ?? "null");
+  const [currentUser, setUser] = useState<ThongTinNguoiDung>(); 
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -31,7 +31,12 @@ function Navbar() {
   };
   useEffect(() => {
     handleLogin();
-    console.log(localStorage.getItem("currentUser"));
+    setUser(()=> {
+      if(localStorage.getItem("currentUser")){
+        return JSON.parse(localStorage.getItem("currentUser") ?? "null");
+      }
+      return null;
+    });
   }, [localStorage.getItem("currentUser")]);
 
   const handleLogin = () => {
@@ -81,6 +86,9 @@ function Navbar() {
                         </Link>
                       </>
                     )}
+                    <Link className="link" to="/myprofile">
+                      Profile
+                    </Link>
                     <Link className="link" to="/orders">
                       Orders
                     </Link>
