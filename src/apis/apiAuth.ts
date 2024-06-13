@@ -1,6 +1,7 @@
+import { ThongTinNguoiDung } from "../models/ThongTinNguoiDung";
 import api from "./apiUtil";
 
-export const authSignUp = async (payload: FormData) =>{
+export const authSignUp = async (payload: ThongTinNguoiDung) =>{
     try {
         const response = await api.post("/auth/signup",payload);
         return response.data.content; // thongtinnguoidung.ts + bookingjob

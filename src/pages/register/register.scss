@@ -20,7 +20,7 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
-        justify-content: space-between;
+        justify-content: baseline;
   
         label {
           color: gray;
@@ -32,16 +32,18 @@
           padding: 20px;
           border: 1px solid rgb(216, 214, 214);
         }
-  
-        button {
-          border: none;
-          padding: 20px;
-          color: white;
-          font-weight: 500;
-          font-size: 18px;
-          background-color: #1dbf73;
-          cursor: pointer;
+        form{
+          button {
+            border: none;
+            padding: 20px;
+            color: white;
+            font-weight: 500;
+            font-size: 18px;
+            background-color: #1dbf73;
+            cursor: pointer;
+          }
         }
+        
   
         .toggle {
           display: flex;

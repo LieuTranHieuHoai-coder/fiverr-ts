@@ -11,14 +11,8 @@ function Navbar() {
     window.scrollY > 0 ? setActive(true) : setActive(false);
   };
   const [isLogin, setLogin] = useState<boolean>(false);
-  useEffect(() => {
-    window.addEventListener("scroll", isActive);
-    return () => {
-      window.removeEventListener("scroll", isActive);
-    };
-  }, []);
 
-  const [currentUser, setUser] = useState<ThongTinNguoiDung>(); 
+  const [currentUser, setUser] = useState<ThongTinNguoiDung>(JSON.parse(localStorage.getItem("currentUser") ?? "null")); 
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -29,6 +23,15 @@ function Navbar() {
       console.log(err);
     }
   };
+  useEffect(() => {
+    setUser(()=> {
+      if(localStorage.getItem("currentUser")){
+        return JSON.parse(localStorage.getItem("currentUser") ?? "null");
+      }
+      return null;
+    });
+  }, []);
+  
   useEffect(() => {
     handleLogin();
     setUser(()=> {
@@ -73,7 +76,7 @@ function Navbar() {
             {isLogin ? (
               <div className="user" onClick={() => setOpen(!open)}>
                 <img src={currentUser?.avatar || "/img/noavatar.jpg"} alt="" />
-                <span>{currentUser?.name}</span>
+                <span className="text-lg text-danger">{currentUser?.name}</span>
                 {open && (
                   <div className="options">
                     {currentUser && (
