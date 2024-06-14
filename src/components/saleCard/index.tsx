@@ -5,7 +5,7 @@ export default function SaleCard() {
     <div>
       <div className="mx-auto my-8 bg-gray-800 p-8 text-white sm:max-w-lg sm:rounded-xl md:py-16 lg:mx-0 lg:max-w-xs">
         <h2 className="mb-6 max-w-lg text-3xl font-bold sm:text-4xl">
-          Prenium
+         Upgrade Prenium
         </h2>
         <ul className="mb-8 flex max-w-xl flex-wrap gap-4">
           <li className="flex space-x-2">

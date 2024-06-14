@@ -1,4 +1,4 @@
-import React from "react";
+
 import "./mygigs.scss";
 import { Avatar, Breadcrumb } from "antd";
 import {
@@ -8,9 +8,11 @@ import {
 } from "@ant-design/icons";
 import { FcFlashOn } from "react-icons/fc";
 import { FaRegStar } from "react-icons/fa6";
-import Review from "../../components/review";
 import SaleCard from "../../components/saleCard";
+import Reviews from "../../components/reviews";
+
 export default function index() {
+
   return (
     <div className="container m-auto">
       <div className="gig-page grid grid-cols-12 gap-4 justify-between">
@@ -19,7 +21,7 @@ export default function index() {
             <Breadcrumb
               items={[
                 {
-                  href: "",
+                  href: "/",
                   title: <HomeOutlined />,
                 },
                 {
@@ -32,7 +34,7 @@ export default function index() {
                   ),
                 },
                 {
-                  title: "Application",
+                  title: "My Gigs",
                 },
               ]}
             />
@@ -65,7 +67,7 @@ export default function index() {
             </div>
           </div>
           <div className="gig-image">
-            <img
+            <img className="w-full"
               src="https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/153836881/original/c529abe5f81496e3c7576e2908619a5fb84f2e7a/make-you-a-digital-portrait-in-preferred-style.png"
               alt=""
             />
@@ -130,17 +132,13 @@ export default function index() {
           </div>
         </div>
         <div className="col-span-12 md:col-span-4 ">
-          <div className="">
-          <SaleCard></SaleCard>
+          <div className="flex justify-center mt-10">
+            <SaleCard></SaleCard>
           </div>
-          
+
         </div>
       </div>
-      <div className="mt-5">
-        <h2 className="text-xl font-bold">Comments</h2>
-        <Review></Review>
-      </div>
-      
+      <Reviews></Reviews>
     </div>
   );
 }

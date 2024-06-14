@@ -1,5 +1,5 @@
 export interface ThongTinNguoiDung {
-  id?: string;
+  id: string;
   name?: string;
   avatar?: string;
   email?: string;
