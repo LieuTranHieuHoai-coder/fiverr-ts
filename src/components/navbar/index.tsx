@@ -81,7 +81,7 @@ function Navbar() {
                   <div className="options">
                     {currentUser && (
                       <>
-                        <Link className="link" to="/mygigs">
+                        <Link className="link" to="/myGigs">
                           Gigs
                         </Link>
                         <Link className="link" to="/add">
@@ -117,7 +117,7 @@ function Navbar() {
         {(active || pathname !== "/") && (
           <>
             <hr />
-            <div className="menu">
+            <div className="menu container">
               <Link className="link menuLink" to="/">
                 Graphics & Design
               </Link>
