@@ -1,6 +1,9 @@
+import { ChiTietLoaiView } from "./ChiTietLoaiView";
+
 export interface ChiTietLoaiCongViecViewModel {
   id?: number;
-  tenChiTiet?: string;
+  tenNhom?: string;
+  hinhAnh?: string;
   maLoaiCongViec?: number;
-  danhSachChiTiet?: [];
+  dsChiTietLoai?: ChiTietLoaiView[];
 }
