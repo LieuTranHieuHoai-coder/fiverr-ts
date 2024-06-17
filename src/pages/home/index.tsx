@@ -18,6 +18,7 @@ function Home() {
       {/* <ProjectCard/> */}
       <div className="container m-auto">
         <h2 className="text-5xl"> Popular services</h2>
+        <div className="py-5"></div>
         <ProjectCard/>
       </div>
 

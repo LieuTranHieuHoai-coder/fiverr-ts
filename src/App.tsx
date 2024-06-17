@@ -15,6 +15,7 @@ import {
 import Pay from "./pages/pay/index";
 import Success from "./pages/success/index";
 import MyProfile from "./pages/myProfile";
+import Categories from "./pages/categories";
 function App() {
   const queryClient = new QueryClient();
 
@@ -70,6 +71,10 @@ function App() {
         {
           path: "/myprofile",
           element: <MyProfile />,
+        },
+        {
+          path: "/category/:id",
+          element: <Categories />,
         }
       ],
     },

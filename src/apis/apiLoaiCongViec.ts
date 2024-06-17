@@ -27,7 +27,7 @@ export const getLoaiCongViec_PhanTrang = async (pageIndex: number, pageSize: num
     }
 }
 
-export const getLoaiCogViecTheoId = async (id:string) => {
+export const getLoaiCogViecTheoId = async (id?:string) => {
     try {
         const response = await api.get(`/loai-cong-viec/${id}`);
         return response.data.content;

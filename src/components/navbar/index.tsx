@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./navbar.scss";
 import { ThongTinNguoiDung } from "../../models/ThongTinNguoiDung";
+import CatLink from "../catLink";
 
 function Navbar() {
   const [active, setActive] = useState(false);
@@ -10,6 +11,12 @@ function Navbar() {
   const isActive = () => {
     window.scrollY > 0 ? setActive(true) : setActive(false);
   };
+  useEffect(() => {
+    window.addEventListener("scroll", isActive);
+    return () => {
+      window.removeEventListener("scroll", isActive);
+    };
+  }, []);
   const [isLogin, setLogin] = useState<boolean>(false);
 
   const [currentUser, setUser] = useState<ThongTinNguoiDung>(JSON.parse(localStorage.getItem("currentUser") ?? "null")); 
@@ -117,35 +124,8 @@ function Navbar() {
         {(active || pathname !== "/") && (
           <>
             <hr />
-            <div className="menu container">
-              <Link className="link menuLink" to="/">
-                Graphics & Design
-              </Link>
-              <Link className="link menuLink" to="/">
-                Video & Animation
-              </Link>
-              <Link className="link menuLink" to="/">
-                Writing & Translation
-              </Link>
-              <Link className="link menuLink" to="/">
-                AI Services
-              </Link>
-              <Link className="link menuLink" to="/">
-                Digital Marketing
-              </Link>
-              <Link className="link menuLink" to="/">
-                Music & Audio
-              </Link>
-              <Link className="link menuLink" to="/">
-                Programming & Tech
-              </Link>
-              <Link className="link menuLink" to="/">
-                Business
-              </Link>
-              <Link className="link menuLink" to="/">
-                Lifestyle
-              </Link>
-            </div>
+            
+              <CatLink></CatLink>
             <hr />
           </>
         )}
