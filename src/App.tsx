@@ -16,6 +16,7 @@ import Pay from "./pages/pay/index";
 import Success from "./pages/success/index";
 import MyProfile from "./pages/myProfile";
 import Categories from "./pages/categories";
+import Gig from "./pages/gig";
 function App() {
   const queryClient = new QueryClient();
 
@@ -75,6 +76,10 @@ function App() {
         {
           path: "/category/:id",
           element: <Categories />,
+        },
+        {
+          path: "/gig/:id",
+          element: <Gig />,
         }
       ],
     },

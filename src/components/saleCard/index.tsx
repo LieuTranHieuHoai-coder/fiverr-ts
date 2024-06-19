@@ -1,13 +1,18 @@
 import React from "react";
+import { CongViecViewModel } from "../../models/CongViecViewModel";
 
-export default function SaleCard() {
+type Props = {
+  value?: CongViecViewModel
+}
+export default function SaleCard(props : Props) {
+  const { value } = props;
   return (
     <div>
       <div className="mx-auto my-8 bg-gray-800 p-8 text-white sm:max-w-lg sm:rounded-xl md:py-16 lg:mx-0 lg:max-w-xs">
         <h2 className="mb-6 max-w-lg text-3xl font-bold sm:text-4xl">
-         Upgrade Prenium
+         Hire me!
         </h2>
-        <ul className="mb-8 flex max-w-xl flex-wrap gap-4">
+        {/* <ul className="mb-8 flex max-w-xl flex-wrap gap-4">
           <li className="flex space-x-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -85,9 +90,14 @@ export default function SaleCard() {
               Further Enhancements to the Dashboard
             </p>
           </li>
-        </ul>
+        </ul> */}
+
+        {
+          value?.moTaNgan
+        }
+        <br />
         <button className="focus:outline-4 rounded-xl bg-emerald-400 px-4 py-3 font-medium text-white shadow-md outline-white transition hover:bg-emerald-500">
-          Continue
+          From $19
         </button>
       </div>
     </div>

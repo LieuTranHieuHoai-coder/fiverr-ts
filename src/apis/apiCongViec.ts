@@ -18,9 +18,9 @@ export const getCongViec = async () => {
     }
  };
 
- export const getApiCongViecPhanTrang = async () => {
+ export const getApiCongViecPhanTrang = async (pageIndex: number, pageSize: number) => {
     try {
-        const response = await api.get("/cong-viec/phan-trang-tim-kiem");
+        const response = await api.get(`/cong-viec/phan-trang-tim-kiem?pageIndex=${pageIndex}&pageSize=${pageSize}`);
         return response.data.content; // list congviecviewmodel
     } catch (error: any) {
         throw Error(error);

@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import Review from "../../components/review";
 import { getBinhLuan, postBinhLuan } from "./../../apis/apiBinhLuan";
 import { BinhLuanViewModel } from "../../models/BinhLuanViewModel";
 import { useForm } from "react-hook-form";
-import dayjs from 'dayjs';
-import { ThongTinNguoiDung } from '../../models/ThongTinNguoiDung';
+import dayjs from "dayjs";
+import { ThongTinNguoiDung } from "../../models/ThongTinNguoiDung";
 export default function Reviews() {
-  const currentDate = dayjs().format('YYYY-MM-DD');
-  const [currentUser, setUser] = useState<ThongTinNguoiDung>(JSON.parse(localStorage.getItem("currentUser") ?? "null"));
+  const currentDate = dayjs().format("YYYY-MM-DD");
+  const [currentUser, setUser] = useState<ThongTinNguoiDung>(
+    JSON.parse(localStorage.getItem("currentUser") ?? "null")
+  );
   const {
     register,
     handleSubmit,
@@ -25,16 +27,16 @@ export default function Reviews() {
   const handleIncrement = () => {
     setCount(count + 2);
   };
-  const [listComments, setListComments] = React.useState<BinhLuanViewModel[]>([]);
+  const [listComments, setListComments] = React.useState<BinhLuanViewModel[]>(
+    []
+  );
 
   const onSubmit = async (data: BinhLuanViewModel) => {
     //e.preventDefault();
     try {
       const res = await postBinhLuan(data);
       setListComments([...listComments, res]);
-    } catch (err: any) {
-
-    }
+    } catch (err: any) {}
   };
   useEffect(() => {
     async function fetchComments() {
@@ -46,14 +48,12 @@ export default function Reviews() {
 
   function loadbinhLuan() {
     const clone = [...listComments];
-    return clone.reverse().slice(0, count).map((comment) => {
-      return (
-        <Review
-          key={comment.id}
-          content={comment}
-        />
-      );
-    });
+    return clone
+      .reverse()
+      .slice(0, count)
+      .map((comment) => {
+        return <Review key={comment.id} content={comment} />;
+      });
   }
   return (
     <div>
@@ -106,31 +106,45 @@ export default function Reviews() {
           </div>
         </div>
         <div className="load-comment">
-
           {loadbinhLuan()}
 
-          <button type="button" className="text-black hover:text-white border border-black hover:bg-blue-700 bg-white font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center my-5" onClick={handleIncrement}>
-            Load more            
+          <button
+            type="button"
+            className="text-black hover:text-white border border-black hover:bg-blue-700 bg-white font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center my-5"
+            onClick={handleIncrement}
+          >
+            Load more
           </button>
-
         </div>
-
-
       </div>
       <div className="mt-5">
         <form className="mb-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-            <label htmlFor="comment" className="sr-only">Your comment</label>
-            <textarea id="comment" {...register('noiDung', { required: 'Comment is required' })} rows={6} className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800" placeholder="Write a comment..." required defaultValue={""} />
-            {errors.noiDung && <p className='text-danger-700'>{errors.noiDung.message}</p>}
+            <label htmlFor="comment" className="sr-only">
+              Your comment
+            </label>
+            <textarea
+              id="comment"
+              {...register("noiDung", { required: "Comment is required" })}
+              rows={6}
+              className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
+              placeholder="Write a comment..."
+              required
+              defaultValue={""}
+            />
+            {errors.noiDung && (
+              <p className="text-danger-700">{errors.noiDung.message}</p>
+            )}
           </div>
 
-          <button type="submit" className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center rounded-lg text-white bg-blue-700">
+          <button
+            type="submit"
+            className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center rounded-lg text-white bg-blue-700"
+          >
             Post comment
           </button>
         </form>
       </div>
-
     </div>
-  )
+  );
 }

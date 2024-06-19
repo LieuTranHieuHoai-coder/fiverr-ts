@@ -1,3 +1,12 @@
+export interface Content {
+  pageIndex: number;
+  pageSize:  number;
+  totalRow:  number;
+  keywords:  null;
+  data: CongViecViewModel[];
+}
+
+
 export interface CongViecViewModel {
   id?: number;
   tenCongViec?: string;

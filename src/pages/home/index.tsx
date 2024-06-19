@@ -3,23 +3,24 @@ import "./home.scss";
 import Featured from "../../components/featured";
 import TrustedBy from "../../components/trustedBy";
 import ProjectCard from "../../components/projectCard";
+import Jobs from "../../components/jobs";
 
 function Home() {
-
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="home">
       <Featured />
       <TrustedBy />
-      {/* <Slide slidesToShow={5} arrowsScroll={5}>
-        {cards.map((card) => (
-          <CatCard key={card.id} card={card} />
-        ))}
-      </Slide> */}
-      {/* <ProjectCard/> */}
       <div className="container m-auto">
-        <h2 className="text-5xl"> Popular services</h2>
+        <h2 className="text-4xl"> Popular services</h2>
         <div className="py-5"></div>
         <ProjectCard/>
+        <div className="py-5"></div>
+        <h2 className="text-4xl"> Gigs you may like </h2>
+        <div className="py-5"></div>
+        <Jobs></Jobs>
       </div>
 
       <div className="features">

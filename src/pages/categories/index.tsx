@@ -18,8 +18,8 @@ export default function Categories() {
     fletchName();
   }, [id]);
   return (
-    <div con >
-      <Breadcrumb
+    <div className="container m-auto" >
+      <Breadcrumb className="my-5"
         items={[
           {
             href: "/",
@@ -36,6 +36,7 @@ export default function Categories() {
           },
         ]}
       />
+      
     </div>
   );
 }
