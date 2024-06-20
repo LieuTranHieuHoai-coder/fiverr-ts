@@ -66,7 +66,7 @@ export const getCongViec = async () => {
  export const getMenuLoaiCongViec = async ()=> {
     try {
         const response = await api.get("/cong-viec/lay-menu-loai-cong-viec");
-        return response.data.content; // list loaiCongViecModel
+        return response.data.content; // list MenuloaiCongViec
     } catch (error:any) {
         throw Error(error);
     }

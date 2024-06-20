@@ -19,7 +19,7 @@ export default function Jobs() {
   function renderJobs() {
     return jobs?.data.map((item) => {
       return (
-        <div className="block rounded-lg bg-white shadow-secondary-1 dark:bg-surface-dark">
+        <div className="block rounded-lg bg-white shadow-secondary-1 dark:bg-surface-dark" key={item.id}>
           <div
             className="relative overflow-hidden bg-cover bg-no-repeat"
             data-twe-ripple-init

@@ -27,7 +27,7 @@ export const getChiTietLoaiCongViec_phantrang = async(pageIndex: number, pageSiz
     }
 }
 
-export const getChiTietLoaiCongViecId = async(id: number) => {
+export const getChiTietLoaiCongViecId = async(id: string | undefined) => {
     try {
         const response = await api.get("/chi-tiet-loai-cong-viec/" + id);
         return response.data.content; // chiTietLoaiCongViecViewModel

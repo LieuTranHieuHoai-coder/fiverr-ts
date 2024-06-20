@@ -1,14 +1,14 @@
 import React from "react";
-import { LoaiCongViecViewModel } from "./../../models/LoaiCongViecModel";
-import { getLoaiCogViec } from "../../apis/apiLoaiCongViec";
+import { MenuLoaiCongViec } from "./../../models/LoaiCongViecModel";
 import { Link } from "react-router-dom";
+import { getMenuLoaiCongViec } from "../../apis/apiCongViec";
 
 export default function CatLink() {
   const [loaiCongViec, setLoaiCongViec] = React.useState<
-    LoaiCongViecViewModel[]
+    MenuLoaiCongViec[]
   >([]);
   React.useEffect(() => {
-    getLoaiCogViec()
+    getMenuLoaiCongViec()
       .then((data) => {
         setLoaiCongViec(data);
       })
@@ -16,12 +16,12 @@ export default function CatLink() {
         console.log(err);
       });
   }, []);
-
+  
   return (
     <div  className="menu container">
-      {loaiCongViec.map((item, index) => {
+      {loaiCongViec?.map((item) => {
         return (
-          <Link key={index} className="link menuLink" to={`/category/${item.id}`}>
+          <Link key={item.id} className="link menuLink" to={`/category/${item.id}`}>
             {item.tenLoaiCongViec}
           </Link>
         );
