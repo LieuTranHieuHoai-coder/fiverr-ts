@@ -17,6 +17,7 @@ import Success from "./pages/success/index";
 import MyProfile from "./pages/myProfile";
 import Categories from "./pages/categories";
 import Gig from "./pages/gig";
+import Search from "./pages/search";
 function App() {
   const queryClient = new QueryClient();
 
@@ -80,6 +81,10 @@ function App() {
         {
           path: "/gig/:id",
           element: <Gig />,
+        },
+        {
+          path: "/search",
+          element: <Search />,
         }
       ],
     },

@@ -16,10 +16,11 @@ function Featured() {
           <h1>
             Find the perfect <span>freelance</span> services for your business
           </h1>
+          
           <div className="search">
-            <div className="searchInput">
+            <div className="searchInput w-full">
               <img src="./img/search.png" alt="" />
-              <input
+              <input className="w-full"
                 type="text"
                 placeholder='Try "building mobil app"'
                 onChange={(e) => setInput(e.target.value)}
