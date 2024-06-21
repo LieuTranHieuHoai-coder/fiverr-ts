@@ -99,7 +99,7 @@ export const getCongViec = async () => {
     }
  }
 
- export const getDanhSachCongViecTheoTen = async (TenCongViec:string) => {
+ export const getDanhSachCongViecTheoTen = async (TenCongViec:string | undefined) => {
     try {
         const response = await api.get("/cong-viec/lay-danh-sach-cong-viec-theo-ten/" + TenCongViec);
         return response.data.content; // list congviecviewmodel

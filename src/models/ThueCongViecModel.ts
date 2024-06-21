@@ -1,7 +1,7 @@
 export interface ThueCongViecViewModel {
   id?: number;
   maCongViec?: number;
-  maNguoiThue?: number;
+  maNguoiThue?: string;
   ngayThue?: string;
   hoanThanh?: boolean;
 }

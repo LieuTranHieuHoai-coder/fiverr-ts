@@ -5,9 +5,14 @@ import { useNavigate } from "react-router-dom";
 function Featured() {
   const [input, setInput] = useState("");
   const navigate = useNavigate();
-
+  const handleInputKeyDown = (event:any) => {
+    if (event.key === 'Enter') {
+      handleSubmit();
+    }
+  };
   const handleSubmit = () => {
-    navigate(`/gigs?search=${input}`);
+    if (input === "") return;
+    navigate(`/gigs/${input}`);
   };
   return (
     <div className="featured">
@@ -24,6 +29,7 @@ function Featured() {
                 type="text"
                 placeholder='Try "building mobil app"'
                 onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleInputKeyDown}  
               />
             </div>
             <button onClick={handleSubmit}>Search</button>

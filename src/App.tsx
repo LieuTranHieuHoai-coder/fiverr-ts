@@ -83,7 +83,7 @@ function App() {
           element: <Gig />,
         },
         {
-          path: "/search",
+          path: "/gigs/:search",
           element: <Search />,
         }
       ],

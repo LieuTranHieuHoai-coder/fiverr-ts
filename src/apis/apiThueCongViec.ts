@@ -1,4 +1,6 @@
+import { ThueCongViecViewModel } from "../models/ThueCongViecModel";
 import api from "./apiUtil";
+
 
 export const getThueCongViec = async () => {
     try {
@@ -9,16 +11,16 @@ export const getThueCongViec = async () => {
     }
 };
 
-export const postThueCongViec = async (payload: FormData) => {
+export const postThueCongViec = async (payload?: ThueCongViecViewModel) => {
     try {
-        const response = await api.post("/thue-cong-viec", payload);
+        const response = await api.post("/thue-cong-viec", payload,);
         return response.data.content;
     } catch (error: any) {
         throw Error(error);
     }
 }
 
-export const putThueCongViec = async (id: number, payload: FormData) => {
+export const putThueCongViec = async (id: number, payload: ThueCongViecViewModel) => {
     try {
         const response = await api.put("/thue-cong-viec/" + id, payload);
         return response.data.content;
