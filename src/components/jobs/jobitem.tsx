@@ -1,35 +1,71 @@
 import { StarFilled } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 import { CongViecViewModel } from '../../models/CongViecViewModel'
+import { postHoanThanhCongViec, deleteThueCongViec } from '../../apis/apiThueCongViec'
+import Swal from 'sweetalert2'
+import { useDanhSachThueStore } from '../../store/orderStore'
 
 type Props = {
   item: CongViecViewModel,
   hoanThanh?: boolean,
+  maThueCongViec?: number
 }
 export default function JobItem(props: Props) {
-  const { item , hoanThanh} = props;
-  function showBtnHoanThanh(){
-    if(hoanThanh === true){
+  const { item, hoanThanh, maThueCongViec } = props;
+  const { remove } = useDanhSachThueStore();
+  const btnHoanThanh = () => {
+    postHoanThanhCongViec(maThueCongViec).then(() => {
+      showBtnHoanThanh();
+    });
+  }
+  const btnDelete = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteThueCongViec(maThueCongViec).then(() => {
+          if (maThueCongViec){
+            remove(maThueCongViec);
+          }
+        });
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      }
+    });
+  }
+  function showBtnHoanThanh() {
+    if (hoanThanh === true) {
       return (
+        <div>
+        <button className="bg-red-500 text-white text-sm font-bold py-2 px-4 mx-2 rounded-full" onClick={()=>btnDelete()}>
+          Delete
+        </button>
         <button className="bg-green-500 text-white text-sm font-bold py-2 px-4 rounded-full">
           Done
         </button>
+        </div>
+        
       )
-      
+
     }
-    else{
-      if(hoanThanh === false){
+    else {
+      if (hoanThanh === false) {
         return (
-          <button className="bg-red-500 text-white text-sm font-bold py-2 px-4 rounded-full">
+          <button className="bg-yellow-500 text-black text-sm font-bold py-2 px-4 rounded-full" onClick={() => btnHoanThanh()}>
             On Working
           </button>
         )
       }
-      else{
+      else {
         <></>
       }
     }
-    
+
   }
   return (
     <div className="block rounded-lg bg-white shadow-secondary-1 dark:bg-surface-dark" key={item.id}>

@@ -29,7 +29,7 @@ export const putThueCongViec = async (id: number, payload: ThueCongViecViewModel
     }
 }
 
-export const deleteThueCongViec = async (id: number) => {
+export const deleteThueCongViec = async (id?: number) => {
     try {
         const response = await api.delete("/thue-cong-viec/" + id);
         return response.data.content;
@@ -65,7 +65,7 @@ export const getDanhSachDaThue = async() => {
     }
 }
 
-export const postHoanThanhCongViec = async (MaThuCongViec: number) => {
+export const postHoanThanhCongViec = async (MaThuCongViec?: number) => {
     try {
         const response = await api.post("/thue-cong-viec/hoan-thanh-cong-viec/" + MaThuCongViec);
         return response.data.content;

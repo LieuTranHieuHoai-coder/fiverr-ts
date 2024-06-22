@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { getDanhSachDaThue, postThueCongViec } from "../../apis/apiThueCongViec";
 import { ThongTinNguoiDung } from "../../models/ThongTinNguoiDung";
 import dayjs from 'dayjs';
+import { useParams } from "react-router-dom";
 
 type Props = {
   value?: CongViecViewModel
 }
 export default function SaleCard(props: Props) {
   const { value } = props;
+  let index = 0;
   const [danhSachThue, setLst] = useState<CongViecThue[]>([]);
 
   useEffect(() => {
@@ -17,9 +19,16 @@ export default function SaleCard(props: Props) {
       setLst(res);
     });
   }, []);
+
+  useEffect(() => {
+    getDanhSachDaThue().then((res) => {
+      setLst(res);
+    });
+  }, [()=>handleClick]);
   const [currentUser, setUser] = useState<ThongTinNguoiDung>(JSON.parse(localStorage.getItem("currentUser") ?? "null")); 
   const currentDate = dayjs().format('DD-MM-YYYY'); 
   const handleClick = () => {
+
     Swal.fire({
       title: "Hire Me With " + "$"+value?.giaTien + "?",
       text: value?.tenCongViec,
@@ -30,8 +39,14 @@ export default function SaleCard(props: Props) {
       confirmButtonText: "Buy it!"
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const index = danhSachThue.findIndex((item) => { item.congViec.id === value?.id } );
-        if (index === -1) {
+        
+        for (let i = 0; i < danhSachThue.length; i++) {
+          if (danhSachThue[i].congViec.id === value?.id) {
+            index = i;
+            break;
+          }
+        }
+        if (index !== 0) {
           Swal.fire({
             title: "Warning!",
             text: "This job has been hired.",
