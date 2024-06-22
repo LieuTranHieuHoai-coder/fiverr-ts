@@ -3,10 +3,34 @@ import { Link } from 'react-router-dom'
 import { CongViecViewModel } from '../../models/CongViecViewModel'
 
 type Props = {
-  item: CongViecViewModel
+  item: CongViecViewModel,
+  hoanThanh?: boolean,
 }
 export default function JobItem(props: Props) {
-  const { item } = props;
+  const { item , hoanThanh} = props;
+  function showBtnHoanThanh(){
+    if(hoanThanh === true){
+      return (
+        <button className="bg-green-500 text-white text-sm font-bold py-2 px-4 rounded-full">
+          Done
+        </button>
+      )
+      
+    }
+    else{
+      if(hoanThanh === false){
+        return (
+          <button className="bg-red-500 text-white text-sm font-bold py-2 px-4 rounded-full">
+            On Working
+          </button>
+        )
+      }
+      else{
+        <></>
+      }
+    }
+    
+  }
   return (
     <div className="block rounded-lg bg-white shadow-secondary-1 dark:bg-surface-dark" key={item.id}>
       <div
@@ -37,10 +61,11 @@ export default function JobItem(props: Props) {
             </span>
           </div>
         </div>
-        <div className="my-3">
+        <div className="my-3 flex items-center justify-between">
           <span className="text-black font-bold text-lg">
             From ${item.giaTien}
           </span>
+          {showBtnHoanThanh()}
         </div>
       </div>
     </div>

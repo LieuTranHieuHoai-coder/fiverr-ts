@@ -9,8 +9,11 @@ type NguoiDungStore = {
 }
 
 export const useNguoiDungStore = create<NguoiDungStore>(set => ({
-    user: {},
+    user: {
+        id: ""
+    },
     add: () => set({}),
     update: () => set({}),
     remove: () => set({}),
 }));
+

@@ -1,12 +1,33 @@
 import React from "react";
-import { Button, ConfigProvider, Popover } from "antd";
+import { Breadcrumb, Button, ConfigProvider, Popover } from "antd";
 import "./myprofile.scss";
 import { FaPencil } from "react-icons/fa6";
 import image from "../../../public/img/itemmyprofile.png";
+import { HomeOutlined } from "@ant-design/icons";
 
 export default function MyProfile() {
   return (
     <div className="relative m-0 p-0">
+      <div className="container m-auto">
+        <Breadcrumb
+          className="my-5"
+          items={[
+            {
+              href: "/",
+              title: <HomeOutlined />,
+            },
+            {
+              href: "",
+              title: (
+                <>
+                  <span>My Profile</span>
+                </>
+              ),
+            },
+          ]}
+        />
+      </div>
+
       <div className="mp-user-data-new">
         <div className="box-avatar-container">
           <div className="box-content flex justify-between align-baseline">
@@ -240,19 +261,22 @@ export default function MyProfile() {
             </section>
             <section className="gigs-column">
               <div className="seller-card text-center flex flex-col justify-center align-middle">
-                <div style={{padding: "95px 0 120px"}}>
-                <div>
-                    <img src={image} alt="" className="m-auto"/>
-                </div>
-                <figcaption className="m-7"><h3 className="text-lg">Ready to earn on your own terms?</h3></figcaption>
-                <button
+                <div style={{ padding: "95px 0 120px" }}>
+                  <div>
+                    <img src={image} alt="" className="m-auto" />
+                  </div>
+                  <figcaption className="m-7">
+                    <h3 className="text-lg">
+                      Ready to earn on your own terms?
+                    </h3>
+                  </figcaption>
+                  <button
                     type="button"
                     className="inline-block font-bold rounded bg-success  px-7 pb-2.5 pt-3 text-xs uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-success-300 hover:shadow-primary-2 focus:bg-success -300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-success-600 active:shadow-primary-2 motion-reduce:transition-none dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
                   >
                     Become a seller
-                </button>
+                  </button>
                 </div>
-                
               </div>
             </section>
           </div>

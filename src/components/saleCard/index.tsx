@@ -1,8 +1,7 @@
-import { CongViecViewModel } from "../../models/CongViecViewModel";
+import { CongViecThue, CongViecViewModel } from "../../models/CongViecViewModel";
 import Swal from 'sweetalert2';
-import { ThueCongViecViewModel } from "../../models/ThueCongViecModel";
 import { useEffect, useState } from "react";
-import { postThueCongViec } from "../../apis/apiThueCongViec";
+import { getDanhSachDaThue, postThueCongViec } from "../../apis/apiThueCongViec";
 import { ThongTinNguoiDung } from "../../models/ThongTinNguoiDung";
 import dayjs from 'dayjs';
 
@@ -11,10 +10,15 @@ type Props = {
 }
 export default function SaleCard(props: Props) {
   const { value } = props;
-  const [thueCongViec,setThueCongViec] = useState<ThueCongViecViewModel>();
-  const [currentUser, setUser] = useState<ThongTinNguoiDung>(JSON.parse(localStorage.getItem("currentUser") ?? "null")); 
-  const currentDate = dayjs().format('DD-MM-YYYY');
+  const [danhSachThue, setLst] = useState<CongViecThue[]>([]);
 
+  useEffect(() => {
+    getDanhSachDaThue().then((res) => {
+      setLst(res);
+    });
+  }, []);
+  const [currentUser, setUser] = useState<ThongTinNguoiDung>(JSON.parse(localStorage.getItem("currentUser") ?? "null")); 
+  const currentDate = dayjs().format('DD-MM-YYYY'); 
   const handleClick = () => {
     Swal.fire({
       title: "Hire Me With " + "$"+value?.giaTien + "?",
@@ -26,19 +30,28 @@ export default function SaleCard(props: Props) {
       confirmButtonText: "Buy it!"
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const sendData: ThueCongViecViewModel = {
-          maCongViec: value?.id,
-          maNguoiThue: currentUser.id,
-          ngayThue: currentDate,
-          hoanThanh: false
+        const index = danhSachThue.findIndex((item) => { item.congViec.id === value?.id } );
+        if (index === -1) {
+          Swal.fire({
+            title: "Warning!",
+            text: "This job has been hired.",
+            icon: "warning",
+          });
         }
-        setThueCongViec(sendData);
-        await postThueCongViec(thueCongViec,);
-        Swal.fire({
-          title: "Successed!",
-          text: "You have successfully.",
-          icon: "success"
-        });
+        else{
+          await postThueCongViec({
+            maCongViec: value?.id,
+            maNguoiThue: currentUser.id,
+            ngayThue: currentDate,
+            hoanThanh: false
+          });
+          Swal.fire({
+            title: "Successed!",
+            text: "You have successfully.",
+            icon: "success"
+          });
+        }
+        
       }
     });
   };

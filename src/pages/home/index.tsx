@@ -1,14 +1,14 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./home.scss";
 import Featured from "../../components/featured";
 import TrustedBy from "../../components/trustedBy";
 import ProjectCard from "../../components/projectCard";
 import Jobs from "../../components/jobs";
+import { useDanhSachThueStore } from "../../store/orderStore";
+import { CongViecThue } from "../../models/CongViecViewModel";
+import { getDanhSachDaThue } from "../../apis/apiThueCongViec";
 
 function Home() {
-  React.useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
   return (
     <div className="home">
       <Featured />

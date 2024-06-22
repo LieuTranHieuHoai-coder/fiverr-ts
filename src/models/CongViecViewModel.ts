@@ -29,3 +29,12 @@ export interface CongViecById {
   tenNguoiTao:        string;
   avatar:             string;
 }
+
+export interface CongViecThue {
+  id:        number;
+  ngayThue:  string;
+  hoanThanh: boolean;
+  congViec:  CongViecViewModel;
+}
+
+
