@@ -12,11 +12,28 @@ type Props = {
 }
 export default function JobItem(props: Props) {
   const { item, hoanThanh, maThueCongViec } = props;
-  const { remove } = useDanhSachThueStore();
+  const { remove, update } = useDanhSachThueStore();
   const btnHoanThanh = () => {
-    postHoanThanhCongViec(maThueCongViec).then(() => {
-      showBtnHoanThanh();
+    Swal.fire({
+      title: "Are you finish this job?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Finished",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        postHoanThanhCongViec(maThueCongViec).then(() => {
+          if (maThueCongViec) {
+            update(maThueCongViec);
+          }
+
+        });
+        Swal.fire("Finished!", "Your job has been finished.", "success");
+      }
     });
+
   }
   const btnDelete = () => {
     Swal.fire({
@@ -30,7 +47,7 @@ export default function JobItem(props: Props) {
     }).then((result) => {
       if (result.isConfirmed) {
         deleteThueCongViec(maThueCongViec).then(() => {
-          if (maThueCongViec){
+          if (maThueCongViec) {
             remove(maThueCongViec);
           }
         });
@@ -42,14 +59,14 @@ export default function JobItem(props: Props) {
     if (hoanThanh === true) {
       return (
         <div>
-        <button className="bg-red-500 text-white text-sm font-bold py-2 px-4 mx-2 rounded-full" onClick={()=>btnDelete()}>
-          Delete
-        </button>
-        <button className="bg-green-500 text-white text-sm font-bold py-2 px-4 rounded-full">
-          Done
-        </button>
+          <button className="bg-red-500 text-white text-sm font-bold py-2 px-4 mx-2 rounded-full" onClick={() => btnDelete()}>
+            Delete
+          </button>
+          <button className="bg-green-500 text-white text-sm font-bold py-2 px-4 rounded-full">
+            Done
+          </button>
         </div>
-        
+
       )
 
     }

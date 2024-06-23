@@ -22,7 +22,6 @@ export default function Orders() {
   }, [addRanges]);
 
 
-  console.log(danhSachThue);
   function renderOrder() {
 
     return danhSachThue?.map((item) => {

@@ -5,8 +5,10 @@ import { BinhLuanViewModel } from "../../models/BinhLuanViewModel";
 import { useForm } from "react-hook-form";
 import dayjs from "dayjs";
 import { ThongTinNguoiDung } from "../../models/ThongTinNguoiDung";
+import { usedanhSachBLStore } from "../../store/commentStore";
 export default function Reviews() {
   const currentDate = dayjs().format("YYYY-MM-DD");
+  const { daSachBL, addRanges, add, remove } = usedanhSachBLStore();
   const [currentUser, setUser] = useState<ThongTinNguoiDung>(
     JSON.parse(localStorage.getItem("currentUser") ?? "null")
   );
@@ -27,28 +29,30 @@ export default function Reviews() {
   const handleIncrement = () => {
     setCount(count + 2);
   };
-  const [listComments, setListComments] = React.useState<BinhLuanViewModel[]>(
-    []
-  );
+  // const [listComments, setListComments] = React.useState<BinhLuanViewModel[]>(
+  //   []
+  // );
 
   const onSubmit = async (data: BinhLuanViewModel) => {
     //e.preventDefault();
     try {
       const res = await postBinhLuan(data);
-      setListComments([...listComments, res]);
+      add(res);
+      //setListComments([...listComments, res]);
+
     } catch (err: any) {}
   };
   useEffect(() => {
     async function fetchComments() {
       const comments = await getBinhLuan();
-      setListComments(comments);
+      addRanges(comments);
     }
     fetchComments();
-  }, []);
+  }, [addRanges]);
 
   function loadbinhLuan() {
-    const clone = [...listComments];
-    return clone
+    //const clone = [...listComments];
+    return daSachBL
       .reverse()
       .slice(0, count)
       .map((comment) => {

@@ -4,13 +4,17 @@ import "./review.scss";
 import { ThongTinNguoiDung } from "../../models/ThongTinNguoiDung";
 import { getUsersById } from "./../../apis/apiNguoiDung"
 import { FaStar } from "react-icons/fa6";
+import { usedanhSachBLStore } from "../../store/commentStore";
+import { deleteBinhLuan } from "../../apis/apiBinhLuan";
+import Swal from "sweetalert2";
 type Props = {
   content: BinhLuanViewModel
 }
 export default function Review(props: Props) {
   const { content } = props;
   const [ttUserId, setTTUserId] = useState<ThongTinNguoiDung>();
-
+  const { remove } = usedanhSachBLStore();
+  const [currentUser, setUser] = useState<ThongTinNguoiDung>(JSON.parse(localStorage.getItem("currentUser") ?? "null")); 
   useEffect(() => {
     async function flecthUser() {
       const data = await getUsersById(content.maNguoiBinhLuan);
@@ -18,12 +22,37 @@ export default function Review(props: Props) {
     }
     flecthUser();
   }, [content.maNguoiBinhLuan])
+
   function loadStar(number: number) {
     const stars = [];
     for (let i = 0; i < number; i++) {
       stars.push(<FaStar key={i} />);
     }
     return stars;
+  }
+
+  const deleteComment = () => {
+    Swal.fire({
+      title: "Are you sure delete this commaent?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        remove(content.id);
+        Swal.fire("Deleted!", "Your comment has been deleted.", "success");
+      }
+    });
+  }
+
+  function renderDeleteBtn(){
+    if(ttUserId?.id === currentUser.id){
+      return <button className="cursor-pointer border mx-2 py-2 px-8 text-center text-xs leading-tight transition-colors duration-150 ease-in-out hover:border-gray-500 rounded-lg" onClick={()=>deleteComment()}>Delete</button>
+    }
+    return <></>;
   }
   return (
     <div>
@@ -48,9 +77,14 @@ export default function Review(props: Props) {
             {content.noiDung}
           </p>
           <div className="mt-5 flex items-center justify-between text-gray-600">
-            <button className="cursor-pointer border py-2 px-8 text-center text-xs leading-tight transition-colors duration-150 ease-in-out hover:border-gray-500 rounded-lg">
-              Reply
-            </button>
+            <div className="flex">
+              <button className="cursor-pointer border py-2 px-8 text-center text-xs leading-tight transition-colors duration-150 ease-in-out hover:border-gray-500 rounded-lg">
+                Reply
+              </button>
+              { renderDeleteBtn() }
+              
+            </div>
+
             <a
               title="Likes"
               href="#"

@@ -27,9 +27,9 @@ export const putBinhLuan = async (id: number, payload: FormData) => {
         throw Error(error);
     }
 }
-export const deleteBinhLuan = async (id: number, payload: FormData) => {
+export const deleteBinhLuan = async (id: number) => {
     try {
-        const response = await api.put("/binh-luan/" + id, payload);
+        const response = await api.delete("/binh-luan/" + id);
         return response.data.content; // binhluanviewmodel
     } catch (error: any) {
         throw Error(error);
