@@ -36,7 +36,7 @@ export const deleteBinhLuan = async (id: number) => {
     }
 }
 
-export const getBinhLuanTheoCongViec = async (macongviec:number) => {
+export const getBinhLuanTheoCongViec = async (macongviec?:string) => {
     try {
         const response = await api.get("/binh-luan/lay-binh-luan-theo-cong-viec/" + macongviec);
         return response.data.content; // list binhluanviewmodel

@@ -6,14 +6,15 @@ import { getUsersById } from "./../../apis/apiNguoiDung"
 import { FaStar } from "react-icons/fa6";
 import { usedanhSachBLStore } from "../../store/commentStore";
 import { deleteBinhLuan } from "../../apis/apiBinhLuan";
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2'
 type Props = {
   content: BinhLuanViewModel
 }
 export default function Review(props: Props) {
   const { content } = props;
+  const [inputValue, setInputValue] = useState(content.noiDung)
   const [ttUserId, setTTUserId] = useState<ThongTinNguoiDung>();
-  const { remove } = usedanhSachBLStore();
+  const { remove, update } = usedanhSachBLStore();
   const [currentUser, setUser] = useState<ThongTinNguoiDung>(JSON.parse(localStorage.getItem("currentUser") ?? "null")); 
   useEffect(() => {
     async function flecthUser() {
@@ -31,9 +32,33 @@ export default function Review(props: Props) {
     return stars;
   }
 
+  const updateComment = () => {
+    Swal.fire({
+      title: "Input something to this comment?",
+      input: 'text',
+      inputValue,
+      preConfirm: () => {
+        setInputValue(Swal.getInput()?.value || content.noiDung)
+      },
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, modify it",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        
+        Swal.fire("Updated!", "Your comment has been updated.", "success");
+        const edit = {...content};
+        edit.noiDung = result.value;
+        update(edit);
+      }
+    });
+  }
+
   const deleteComment = () => {
     Swal.fire({
-      title: "Are you sure delete this commaent?",
+      title: "Are you sure delete this comment?",
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
@@ -49,11 +74,19 @@ export default function Review(props: Props) {
   }
 
   function renderDeleteBtn(){
-    if(ttUserId?.id === currentUser.id){
-      return <button className="cursor-pointer border mx-2 py-2 px-8 text-center text-xs leading-tight transition-colors duration-150 ease-in-out hover:border-gray-500 rounded-lg" onClick={()=>deleteComment()}>Delete</button>
+    if(currentUser?.id === currentUser.id){
+      return <button className="cursor-pointer border mx-2 py-2 px-8 text-center text-xs leading-tight transition-colors duration-150 ease-in-out hover:border-red-500 rounded-lg" onClick={()=>deleteComment()}>Delete</button>
     }
     return <></>;
   }
+
+  function renderUpdateBtn(){
+    if(currentUser?.id === currentUser.id){
+      return <button className="cursor-pointer border py-2 px-8 text-center text-xs leading-tight transition-colors duration-150 ease-in-out hover:border-yellow-500 rounded-lg" onClick={()=>updateComment()}>Modify</button>
+    }
+    return <></>;
+  }
+
   return (
     <div>
       <div className="flex max-w-screen-lg rounded-xl border border-gray-100 p-4 text-left text-gray-600 shadow-lg sm:p-8">
@@ -82,7 +115,7 @@ export default function Review(props: Props) {
                 Reply
               </button>
               { renderDeleteBtn() }
-              
+              { renderUpdateBtn() }
             </div>
 
             <a

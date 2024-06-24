@@ -36,7 +36,7 @@ export const deleteUsers = async (id: number) => {
     }
 }
 
-export const getUsersById = async (id: number) => {
+export const getUsersById = async (id: string) => {
     try {
         const response = await api.get("/users/" + id);
         return response.data.content;

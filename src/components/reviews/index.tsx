@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Review from "../../components/review";
-import { getBinhLuan, postBinhLuan } from "./../../apis/apiBinhLuan";
+import { getBinhLuanTheoCongViec, postBinhLuan } from "./../../apis/apiBinhLuan";
 import { BinhLuanViewModel } from "../../models/BinhLuanViewModel";
 import { useForm } from "react-hook-form";
 import dayjs from "dayjs";
 import { ThongTinNguoiDung } from "../../models/ThongTinNguoiDung";
 import { usedanhSachBLStore } from "../../store/commentStore";
+import { useParams } from "react-router-dom";
 export default function Reviews() {
   const currentDate = dayjs().format("YYYY-MM-DD");
-  const { daSachBL, addRanges, add, remove } = usedanhSachBLStore();
+  const { id } = useParams();
+  const { daSachBL, addRanges, add } = usedanhSachBLStore();
   const [currentUser, setUser] = useState<ThongTinNguoiDung>(
     JSON.parse(localStorage.getItem("currentUser") ?? "null")
   );
@@ -18,20 +20,17 @@ export default function Reviews() {
     formState: { errors },
   } = useForm<BinhLuanViewModel>({
     defaultValues: {
-      maCongViec: 17,
+      maCongViec: Number(id),
       saoBinhLuan: 5,
       ngayBinhLuan: currentDate,
-      maNguoiBinhLuan: parseInt(currentUser.id),
+      maNguoiBinhLuan: currentUser.id,
     },
   });
   const [count, setCount] = useState<number>(2);
 
   const handleIncrement = () => {
-    setCount(count + 2);
+    setCount(count + 5);
   };
-  // const [listComments, setListComments] = React.useState<BinhLuanViewModel[]>(
-  //   []
-  // );
 
   const onSubmit = async (data: BinhLuanViewModel) => {
     //e.preventDefault();
@@ -44,7 +43,7 @@ export default function Reviews() {
   };
   useEffect(() => {
     async function fetchComments() {
-      const comments = await getBinhLuan();
+      const comments = await getBinhLuanTheoCongViec(id);
       addRanges(comments);
     }
     fetchComments();

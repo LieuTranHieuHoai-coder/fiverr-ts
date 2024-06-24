@@ -4,8 +4,8 @@ import { BinhLuanViewModel } from "../models/BinhLuanViewModel";
 type BinhLuanStore = {
   daSachBL: BinhLuanViewModel[];
   addRanges: (lst: BinhLuanViewModel[]) => void;
-  update: (id:number) => void;
-  remove: (id:number) => void;
+  update: (item: BinhLuanViewModel) => void;
+  remove: (id: number) => void;
   add: (item: BinhLuanViewModel) => void;
 };
 export const usedanhSachBLStore = create<BinhLuanStore>((set) => ({
@@ -15,7 +15,10 @@ export const usedanhSachBLStore = create<BinhLuanStore>((set) => ({
     set((state) => ({
       daSachBL: [...lst],
     })),
-  update: () => set((state) => ({
+  update: (item) => set((state) => ({
+    daSachBL: state.daSachBL.map((i) =>
+      i.id === item.id ? { ...i, noiDung: item.noiDung } : i
+    ),
   })),
   remove: (id) => set((state) => ({
     daSachBL: state.daSachBL.filter((item) => item.id !== id),
