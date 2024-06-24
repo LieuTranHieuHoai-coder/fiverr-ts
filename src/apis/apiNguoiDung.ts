@@ -63,7 +63,7 @@ export const getUserSearch = async (TenNguoiDung: string) => {
     }
 }
 
-export const uploadAvatar = async (payload: FormData) => {
+export const uploadAvatar = async (payload: File) => {
     try {
         const response = await api.post("/users/upload-avatar", payload);
         return response.data.content;

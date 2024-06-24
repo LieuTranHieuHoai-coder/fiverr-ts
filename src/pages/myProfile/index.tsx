@@ -1,11 +1,44 @@
-import React from "react";
-import { Breadcrumb, Button, ConfigProvider, Popover } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { Breadcrumb, Button, ConfigProvider, Popover, Select, SelectProps } from "antd";
 import "./myprofile.scss";
 import { FaPencil } from "react-icons/fa6";
 import image from "../../../public/img/itemmyprofile.png";
 import { HomeOutlined } from "@ant-design/icons";
+import { ThongTinNguoiDung } from "../../models/ThongTinNguoiDung";
+import { uploadAvatar } from "../../apis/apiNguoiDung";
+import { getSkills } from "../../apis/apiSkill";
+import { SkillModel } from "../../models/SkillModel";
+import { useNguoiDungStore } from "../../store/userStore";
 
 export default function MyProfile() {
+  const currentUser: ThongTinNguoiDung = JSON.parse(localStorage.getItem("currentUser") ?? "");
+  const [options,setLst] = useState<SkillModel[]>([]);
+  const { skills, addSkills } = useNguoiDungStore();
+  
+  useEffect(() => {
+    getSkills().then((res) =>{
+      addSkills(res);
+    });
+  },[]);
+
+  const handleChange = (value: string) => {
+    console.log(`selected ${value}`);
+  };
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile && ['image/png', 'image/jpeg', 'image/svg+xml'].includes(selectedFile.type)) {
+      uploadAvatar(selectedFile);
+    } else {
+      // Handle non-supported image file selection
+      console.log('Please select a PNG, JPG, or SVG image file.');
+    }
+  };
   return (
     <div className="relative m-0 p-0">
       <div className="container m-auto">
@@ -35,17 +68,24 @@ export default function MyProfile() {
               <div className="seller-card">
                 <div className="user-profile-info">
                   <div className="flex justify-center">
-                    <div className="user-avatar">
+                    <div className="user-avatar cursor-pointer">
                       <img
-                        src="/img/noavatar.jpg"
+                        src={currentUser.avatar || "/img/noavatar.jpg"}
                         className="rounded-full w-2/4 h-auto m-auto"
-                        alt=""
+                        alt="Click to choose file"
+                        onClick={handleImageClick}
+                      />
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        style={{ display: 'none' }}
                       />
                     </div>
                   </div>
                   <div className="user-name text-center flex justify-center align-middle">
                     <div>
-                      <b className="text-2xl">User Name </b>
+                      <b className="text-2xl">{currentUser.name}</b>
                     </div>
                     <div className="ml-2 mt-1">
                       <FaPencil
@@ -55,7 +95,7 @@ export default function MyProfile() {
                     </div>
                   </div>
                   <div className="user-email text-center font-medium text-lg opacity-65">
-                    <span>@lieuhoai</span>
+                    <span>{currentUser.email}</span>
                   </div>
                   <div className="mt-3 flex justify-center">
                     <span>
@@ -88,6 +128,12 @@ export default function MyProfile() {
                       <span>Member Since</span>
                     </div>
                     <div className="font-bold">JAN 2024</div>
+                  </div>
+                  <div className="flex justify-between mt-3 align-baseline">
+                    <div>
+                      <span>Birthday</span>
+                    </div>
+                    <div className="font-bold">{currentUser.birthday}</div>
                   </div>
                 </div>
                 <div className="displayname">
@@ -131,7 +177,19 @@ export default function MyProfile() {
                     theme={{
                       token: {
                         colorText: "rgba(255, 255, 255, 0.88)",
-                        colorBgElevated: "#333333",
+                        colorBorder: "#333333"
+                        //colorBgElevated: "#333333",
+                      },
+                      components: {
+                        Select: {
+                          selectorBg:"#333333",
+                          optionSelectedColor: "rgba(0, 0, 0, 0.88)",
+                          optionSelectedBg: "rgba(0, 0, 0, 0.88)",
+                          optionActiveBg:"rgba(0, 0, 0, 0.88)",
+                          multipleItemBg:"rgba(0, 0, 0, 0.88)",
+                          multipleItemBorderColor:"#333333",
+                          multipleItemBorderColorDisabled: "#333333",
+                        },
                       },
                     }}
                   >
@@ -160,6 +218,7 @@ export default function MyProfile() {
                         colorText: "rgba(255, 255, 255, 0.88)",
                         colorBgElevated: "#333333",
                       },
+
                     }}
                   >
                     <Popover
@@ -180,12 +239,17 @@ export default function MyProfile() {
                   className="mt-5 mb-5 bg-slate-300"
                   style={{ height: 1 }}
                 ></div>
-                <div className="mb-10">
+                <div className="">
                   <ConfigProvider
                     theme={{
                       token: {
-                        colorText: "rgba(255, 255, 255, 0.88)",
-                        colorBgElevated: "#333333",
+                        colorBorder: "#333333"
+                      },
+                      components: {
+                        Select: {
+                          optionSelectedColor: "rgba(0, 0, 0, 0.88)",
+                          multipleItemBg:"rgba(255, 255, 0, 0.88)",
+                        },
                       },
                     }}
                   >
@@ -200,6 +264,16 @@ export default function MyProfile() {
                           Add new
                         </a>
                       </div>
+                      <div className="my-3">
+                        <Select
+                          mode="tags"
+                          style={{ width: '100%' }}
+                          placeholder="Tags Mode"
+                          onChange={handleChange}
+                          options={skills}
+                        />
+                      </div>
+
                     </Popover>
                   </ConfigProvider>
                 </div>
