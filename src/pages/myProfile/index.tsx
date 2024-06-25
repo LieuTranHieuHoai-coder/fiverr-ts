@@ -12,7 +12,7 @@ import { useNguoiDungStore } from "../../store/userStore";
 
 export default function MyProfile() {
   const currentUser: ThongTinNguoiDung = JSON.parse(localStorage.getItem("currentUser") ?? "");
-  const [options,setLst] = useState<SkillModel[]>([]);
+  
   const { skills, addSkills } = useNguoiDungStore();
   
   useEffect(() => {
@@ -20,6 +20,15 @@ export default function MyProfile() {
       addSkills(res);
     });
   },[]);
+
+  const options: SelectProps['options'] = [];
+
+  for (let i = 0; i < skills.length; i++) {
+    options.push({
+      label: skills[i].tenSkill,
+      value: skills[i].id,
+    });
+  }
 
   const handleChange = (value: string) => {
     console.log(`selected ${value}`);
@@ -270,7 +279,7 @@ export default function MyProfile() {
                           style={{ width: '100%' }}
                           placeholder="Tags Mode"
                           onChange={handleChange}
-                          options={skills}
+                          options={options}
                         />
                       </div>
 

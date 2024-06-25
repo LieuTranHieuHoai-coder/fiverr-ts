@@ -18,8 +18,7 @@ function Navbar() {
     };
   }, []);
   const [isLogin, setLogin] = useState<boolean>(false);
-
-  const [currentUser, setUser] = useState<ThongTinNguoiDung>(JSON.parse(localStorage.getItem("currentUser") ?? "null")); 
+  const [currentUser, setUser] = useState<ThongTinNguoiDung>(); 
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -31,26 +30,25 @@ function Navbar() {
     }
   };
   useEffect(() => {
-    setUser(()=> {
-      if(localStorage.getItem("currentUser")){
+    if(localStorage.getItem("currentUser") !== "undefined"){
+      setUser(()=> {
         return JSON.parse(localStorage.getItem("currentUser") ?? "null");
-      }
-      return null;
-    });
+      });
+    }
+    
   }, []);
   
   useEffect(() => {
     handleLogin();
-    setUser(()=> {
-      if(localStorage.getItem("currentUser")){
+    if(localStorage.getItem("currentUser") !== "undefined"){
+      setUser(()=> {
         return JSON.parse(localStorage.getItem("currentUser") ?? "null");
-      }
-      return null;
-    });
+      });
+    }
   }, [localStorage.getItem("currentUser")]);
 
   const handleLogin = () => {
-    if (localStorage.getItem("currentUser") !== "null" && localStorage.getItem("currentUser") !== null) {
+    if (localStorage.getItem("currentUser") !== "undefined" && localStorage.getItem("currentUser") !== "null" && localStorage.getItem("currentUser") !== null) {
       setLogin(() => {
         return true;
       })
@@ -86,10 +84,10 @@ function Navbar() {
                 <span className="text-lg text-danger">{currentUser?.name}</span>
                 {open && (
                   <div className="options">
-                    {currentUser && (
+                    {currentUser?.role === "admin" && (
                       <>
-                        <Link className="link" to="/myGigs">
-                          Gigs
+                        <Link className="link" to="/admin-category">
+                          Group Category
                         </Link>
                         <Link className="link" to="/add">
                           Add New Gig

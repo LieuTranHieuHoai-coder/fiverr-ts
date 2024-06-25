@@ -18,6 +18,7 @@ import MyProfile from "./pages/myProfile";
 import Categories from "./pages/categories";
 import Gig from "./pages/gig";
 import Search from "./pages/search";
+import AdminCategory from "./pages/adminCategory";
 function App() {
   const queryClient = new QueryClient();
 
@@ -42,13 +43,17 @@ function App() {
           path: "/",
           element: <Home />,
         },
-        {
-          path: "/myGigs",
-          element: <MyGigs />,
-        },
+        // {
+        //   path: "/myGigs",
+        //   element: <MyGigs />,
+        // },
         {
           path: "/orders",
           element: <Orders />,
+        },
+        {
+          path: "/admin-category",
+          element: <AdminCategory />,
         },
         {
           path: "/add",
