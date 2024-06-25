@@ -5,4 +5,5 @@ export interface BinhLuanViewModel {
   ngayBinhLuan: string;
   noiDung?: string;
   saoBinhLuan: number;
+  tenNguoiBinhLuan?: string;
 }

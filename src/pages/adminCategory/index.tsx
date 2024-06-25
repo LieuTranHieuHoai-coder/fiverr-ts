@@ -4,68 +4,42 @@ import {
   SettingOutlined,
 } from "@ant-design/icons";
 import { Card, ConfigProvider, Menu, MenuProps } from "antd";
-import React from "react";
+import React, { useState } from "react";
+import TableGroup from "../../components/admin/tableGroup";
 type MenuItem = Required<MenuProps>["items"][number];
 
 export default function AdminCategory() {
+  const [titleRight, setTitle]= useState("Group Category ( Token 403 No permission )");
   const items: MenuItem[] = [
     {
       key: "sub1",
       icon: <MailOutlined />,
-      label: "Navigation One",
-      children: [
-        {
-          key: "1-1",
-          label: "Item 1",
-          type: "group",
-          children: [
-            { key: "1", label: "Option 1" },
-            { key: "2", label: "Option 2" },
-          ],
-        },
-        {
-          key: "1-2",
-          label: "Item 2",
-          type: "group",
-          children: [
-            { key: "3", label: "Option 3" },
-            { key: "4", label: "Option 4" },
-          ],
-        },
-      ],
+      label: "Group Category",
+      
     },
     {
       key: "sub2",
       icon: <AppstoreOutlined />,
-      label: "Navigation Two",
-      children: [
-        { key: "5", label: "Option 5" },
-        { key: "6", label: "Option 6" },
-        {
-          key: "sub3",
-          label: "Submenu",
-          children: [
-            { key: "7", label: "Option 7" },
-            { key: "8", label: "Option 8" },
-          ],
-        },
-      ],
+      label: "Category",
+      
     },
     {
       key: "sub4",
-      label: "Navigation Three",
+      label: "Jobs",
       icon: <SettingOutlined />,
-      children: [
-        { key: "9", label: "Option 9" },
-        { key: "10", label: "Option 10" },
-        { key: "11", label: "Option 11" },
-        { key: "12", label: "Option 12" },
-      ],
     },
   ];
 
   const onClick: MenuProps["onClick"] = (e) => {
-    console.log("click", e);
+    if (e.key === "sub1") {
+      setTitle("Group Category ( Token 403 No permission )");
+    }
+    if (e.key === "sub2") {
+      setTitle("Category ( Token 403 No permission )");
+    }
+    if (e.key === "sub4") {
+      setTitle("Jobs ( Token 403 No permission )");
+    }
   };
 
   return (
@@ -83,7 +57,7 @@ export default function AdminCategory() {
             >
               <Menu
                 onClick={onClick}
-                style={{ width: 256 }}
+                style={{ width: "100%" }}
                 mode="vertical"
                 items={items}
               />
@@ -92,10 +66,8 @@ export default function AdminCategory() {
         </div>
 
         <div className="col-span-2">
-          <Card title="Categories" bordered className="w-full">
-            <p>Card content</p>
-            <p>Card content</p>
-            <p>Card content</p>
+          <Card title={titleRight} bordered className="w-full">
+            <TableGroup></TableGroup>
           </Card>
         </div>
       </div>

@@ -18,9 +18,8 @@ function Navbar() {
     };
   }, []);
   const [isLogin, setLogin] = useState<boolean>(false);
-  const [currentUser, setUser] = useState<ThongTinNguoiDung>(); 
+   
   const navigate = useNavigate();
-
   const handleLogout = async () => {
     try {
       localStorage.setItem("currentUser", 'null');
@@ -29,15 +28,14 @@ function Navbar() {
       console.log(err);
     }
   };
+  const [currentUser, setUser] = useState<ThongTinNguoiDung>();
   useEffect(() => {
     if(localStorage.getItem("currentUser") !== "undefined"){
       setUser(()=> {
         return JSON.parse(localStorage.getItem("currentUser") ?? "null");
       });
-    }
-    
+    } 
   }, []);
-  
   useEffect(() => {
     handleLogin();
     if(localStorage.getItem("currentUser") !== "undefined"){

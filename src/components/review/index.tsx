@@ -15,11 +15,23 @@ export default function Review(props: Props) {
   const [inputValue, setInputValue] = useState(content.noiDung)
   const [ttUserId, setTTUserId] = useState<ThongTinNguoiDung>();
   const { remove, update } = usedanhSachBLStore();
-  const [currentUser, setUser] = useState<ThongTinNguoiDung>(JSON.parse(localStorage.getItem("currentUser") ?? "null")); 
+  const [currentUser, setUser] = useState<ThongTinNguoiDung>();
+  useEffect(() => {
+    if(localStorage.getItem("currentUser") !== "undefined"){
+      setUser(()=> {
+        return JSON.parse(localStorage.getItem("currentUser") ?? "null");
+      });
+    } 
+    console.log(localStorage.getItem("currentUser"));
+  }, []);
+
   useEffect(() => {
     async function flecthUser() {
-      const data = await getUsersById(content.maNguoiBinhLuan);
-      setTTUserId(data);
+      if(localStorage.getItem("currentUser") !== "undefined"){
+        const data = await getUsersById(content.maNguoiBinhLuan);
+        setTTUserId(data);
+      }
+      
     }
     flecthUser();
   }, [content.maNguoiBinhLuan])
@@ -74,14 +86,14 @@ export default function Review(props: Props) {
   }
 
   function renderDeleteBtn(){
-    if(currentUser?.id === currentUser.id){
+    if(content.tenNguoiBinhLuan === currentUser?.name && currentUser !== undefined && currentUser){
       return <button className="cursor-pointer border mx-2 py-2 px-8 text-center text-xs leading-tight transition-colors duration-150 ease-in-out hover:border-red-500 rounded-lg" onClick={()=>deleteComment()}>Delete</button>
     }
     return <></>;
   }
 
   function renderUpdateBtn(){
-    if(currentUser?.id === currentUser.id){
+    if(content.tenNguoiBinhLuan === currentUser?.name && currentUser !== undefined && currentUser ){
       return <button className="cursor-pointer border py-2 px-8 text-center text-xs leading-tight transition-colors duration-150 ease-in-out hover:border-yellow-500 rounded-lg" onClick={()=>updateComment()}>Modify</button>
     }
     return <></>;

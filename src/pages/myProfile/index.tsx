@@ -7,7 +7,6 @@ import { HomeOutlined } from "@ant-design/icons";
 import { ThongTinNguoiDung } from "../../models/ThongTinNguoiDung";
 import { uploadAvatar } from "../../apis/apiNguoiDung";
 import { getSkills } from "../../apis/apiSkill";
-import { SkillModel } from "../../models/SkillModel";
 import { useNguoiDungStore } from "../../store/userStore";
 
 export default function MyProfile() {
@@ -282,7 +281,9 @@ export default function MyProfile() {
                           options={options}
                         />
                       </div>
-
+                      <div className="my-3">
+                        {currentUser.skill}
+                      </div>
                     </Popover>
                   </ConfigProvider>
                 </div>

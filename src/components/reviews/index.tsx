@@ -11,9 +11,14 @@ export default function Reviews() {
   const currentDate = dayjs().format("YYYY-MM-DD");
   const { id } = useParams();
   const { daSachBL, addRanges, add } = usedanhSachBLStore();
-  const [currentUser, setUser] = useState<ThongTinNguoiDung>(
-    JSON.parse(localStorage.getItem("currentUser") ?? "null")
-  );
+  const [currentUser, setUser] = useState<ThongTinNguoiDung>();
+  useEffect(() => {
+    if(localStorage.getItem("currentUser") !== "undefined"){
+      setUser(()=> {
+        return JSON.parse(localStorage.getItem("currentUser") ?? "null");
+      });
+    } 
+  }, []);
   const {
     register,
     handleSubmit,
@@ -23,10 +28,10 @@ export default function Reviews() {
       maCongViec: Number(id),
       saoBinhLuan: 5,
       ngayBinhLuan: currentDate,
-      maNguoiBinhLuan: currentUser.id,
+      maNguoiBinhLuan: currentUser?.id,
     },
   });
-  const [count, setCount] = useState<number>(2);
+  const [count, setCount] = useState<number>(5);
 
   const handleIncrement = () => {
     setCount(count + 5);
