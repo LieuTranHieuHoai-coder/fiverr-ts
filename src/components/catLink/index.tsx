@@ -18,7 +18,7 @@ export default function CatLink() {
   }, []);
   
   return (
-    <div  className="menu container">
+    <div  className="menu">
       {loaiCongViec?.map((item) => {
         return (
           <Link key={item.id} className="link menuLink" to={`/category/${item.id}`}>

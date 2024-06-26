@@ -6,12 +6,14 @@ import { useForm } from "react-hook-form";
 import dayjs from "dayjs";
 import { ThongTinNguoiDung } from "../../models/ThongTinNguoiDung";
 import { usedanhSachBLStore } from "../../store/commentStore";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 export default function Reviews() {
   const currentDate = dayjs().format("YYYY-MM-DD");
   const { id } = useParams();
   const { daSachBL, addRanges, add } = usedanhSachBLStore();
   const [currentUser, setUser] = useState<ThongTinNguoiDung>();
+  const navigate = useNavigate();
   useEffect(() => {
     if(localStorage.getItem("currentUser") !== "undefined"){
       setUser(()=> {
@@ -19,6 +21,7 @@ export default function Reviews() {
       });
     } 
   }, []);
+
   const {
     register,
     handleSubmit,
@@ -31,6 +34,7 @@ export default function Reviews() {
       maNguoiBinhLuan: currentUser?.id,
     },
   });
+
   const [count, setCount] = useState<number>(5);
 
   const handleIncrement = () => {
@@ -40,10 +44,13 @@ export default function Reviews() {
   const onSubmit = async (data: BinhLuanViewModel) => {
     //e.preventDefault();
     try {
-      const res = await postBinhLuan(data);
-      add(res);
-      //setListComments([...listComments, res]);
-
+      if(localStorage.getItem("currentUser") === "undefined" || localStorage.getItem("currentUser") === "null"){
+        Swal.fire("You need login first!");
+      } 
+      else{
+        const res = await postBinhLuan(data);
+        add(res);
+      }
     } catch (err: any) {}
   };
   useEffect(() => {

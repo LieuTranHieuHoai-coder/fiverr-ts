@@ -18,7 +18,7 @@ function Featured() {
     <div className="featured">
       <div className="container">
         <div className="left">
-          <h1>
+          <h1 className="md: text-sm xs:text-sm">
             Find the perfect <span>freelance</span> services for your business
           </h1>
           

@@ -61,18 +61,8 @@ export default function JobsFilter(props: Props){
   }
   return (
     <div>
-      <div className="grid grid-cols-4 gap-4">{renderJobs()}</div>
-      {/* <div className="my-5">
-        <Pagination
-          defaultCurrent={currentPage}
-          total={jobs.coun}
-          showTotal={(total) => `Total ${total} items`}
-          pageSize={PAGE_SIZE}
-          onChange={(page: number) => {
-            setCurrentPage(page);
-          }}
-        />
-      </div> */}
+      <div className="grid grid-cols-4 md:grid-cols-1 xs:grid-cols-1 gap-4">{renderJobs()}</div>
+      
     </div>
   );
 }

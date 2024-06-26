@@ -57,7 +57,7 @@ function Register() {
   };
   return (
     <>
-      <h1>Register</h1>
+      <h1 className="text-lg font-bold text-center my-5">Register</h1>
       <div className="register">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="left">

@@ -5,10 +5,10 @@
   
     form {
       width: 960px;
-      padding: 100px 0px;
+      padding: 0px 0px;
       display: flex;
-      gap: 120px;
-  
+      gap: 120px; 
+      @media (max-width: 768px) { flex-direction: column; width: 95%; gap: 20px; padding: 0;}
       h1 {
         color: gray;
         margin-bottom: 20px;

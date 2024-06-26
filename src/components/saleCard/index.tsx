@@ -4,13 +4,14 @@ import { useEffect, useState } from "react";
 import { getDanhSachDaThue, postThueCongViec } from "../../apis/apiThueCongViec";
 import { ThongTinNguoiDung } from "../../models/ThongTinNguoiDung";
 import dayjs from 'dayjs';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 type Props = {
   value?: CongViecViewModel
 }
 export default function SaleCard(props: Props) {
   const { value } = props;
+  const navigate = useNavigate();
   let index = 0;
   const [danhSachThue, setLst] = useState<CongViecThue[]>([]);
 
@@ -28,47 +29,52 @@ export default function SaleCard(props: Props) {
   const [currentUser, setUser] = useState<ThongTinNguoiDung>(JSON.parse(localStorage.getItem("currentUser") ?? "null")); 
   const currentDate = dayjs().format('DD-MM-YYYY'); 
   const handleClick = () => {
-
-    Swal.fire({
-      title: "Hire Me With " + "$"+value?.giaTien + "?",
-      text: value?.tenCongViec,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#34D399",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Buy it!"
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        
-        for (let i = 0; i < danhSachThue.length; i++) {
-          if (danhSachThue[i].congViec.id === value?.id) {
-            index = i;
-            break;
+    if(localStorage.getItem("currentUser") === "undefined" || localStorage.getItem("currentUser") === "null"){
+      navigate("/login"); 
+    } 
+    else{
+      Swal.fire({
+        title: "Hire Me With " + "$"+value?.giaTien + "?",
+        text: value?.tenCongViec,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#34D399",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Buy it!"
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          
+          for (let i = 0; i < danhSachThue.length; i++) {
+            if (danhSachThue[i].congViec.id === value?.id) {
+              index = i;
+              break;
+            }
           }
+          if (index !== 0) {
+            Swal.fire({
+              title: "Warning!",
+              text: "This job has been hired.",
+              icon: "warning",
+            });
+          }
+          else{
+            await postThueCongViec({
+              maCongViec: value?.id,
+              maNguoiThue: currentUser.id,
+              ngayThue: currentDate,
+              hoanThanh: false
+            });
+            Swal.fire({
+              title: "Successed!",
+              text: "You have successfully.",
+              icon: "success"
+            });
+          }
+          
         }
-        if (index !== 0) {
-          Swal.fire({
-            title: "Warning!",
-            text: "This job has been hired.",
-            icon: "warning",
-          });
-        }
-        else{
-          await postThueCongViec({
-            maCongViec: value?.id,
-            maNguoiThue: currentUser.id,
-            ngayThue: currentDate,
-            hoanThanh: false
-          });
-          Swal.fire({
-            title: "Successed!",
-            text: "You have successfully.",
-            icon: "success"
-          });
-        }
-        
-      }
-    });
+      });
+    }
+    
   };
 
   return (
