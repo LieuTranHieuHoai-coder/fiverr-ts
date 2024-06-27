@@ -208,7 +208,7 @@ export default function MyProfile() {
                     >
                       <div className="flex justify-between align-baseline">
                         <b className="font-bold text-base">Destination</b>
-                        <a href="" className="text-primary-600 text-base">
+                        <a href="#" className="text-primary-600 text-base">
                           Edit Description
                         </a>
                       </div>
@@ -236,7 +236,7 @@ export default function MyProfile() {
                     >
                       <div className="flex justify-between align-baseline">
                         <b className="font-bold text-base">Languages</b>
-                        <a href="" className="text-primary-600 text-base">
+                        <a href="#" className="text-primary-600 text-base">
                           Add new
                         </a>
                       </div>
@@ -268,7 +268,7 @@ export default function MyProfile() {
                     >
                       <div className="flex justify-between align-baseline">
                         <b className="font-bold text-base">Skills</b>
-                        <a href="" className="text-primary-600 text-base">
+                        <a href="#" className="text-primary-600 text-base">
                           Add new
                         </a>
                       </div>
@@ -307,7 +307,7 @@ export default function MyProfile() {
                     >
                       <div className="flex justify-between align-baseline">
                         <b className="font-bold text-base">Education</b>
-                        <a href="" className="text-primary-600 text-base">
+                        <a href="#" className="text-primary-600 text-base">
                           Add new
                         </a>
                       </div>
@@ -334,7 +334,7 @@ export default function MyProfile() {
                     >
                       <div className="flex justify-between align-baseline">
                         <b className="font-bold text-base">Certification</b>
-                        <a href="" className="text-primary-600 text-base">
+                        <a href="#" className="text-primary-600 text-base">
                           Add new
                         </a>
                       </div>

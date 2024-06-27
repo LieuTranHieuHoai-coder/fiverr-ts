@@ -36,7 +36,7 @@ export default function Gig() {
   }, []);
   return (
     <div className="container m-auto">
-      <div className="gig-page grid grid-cols-12 gap-4 justify-between">
+      <div className="gig-page grid grid-cols-12 gap-4 justify-between px-4">
         <div className="main col-span-12 md:col-span-8">
           <div className="mt-5 mb-5">
             <Breadcrumb

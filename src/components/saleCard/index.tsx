@@ -29,7 +29,7 @@ export default function SaleCard(props: Props) {
   const [currentUser, setUser] = useState<ThongTinNguoiDung>(JSON.parse(localStorage.getItem("currentUser") ?? "null")); 
   const currentDate = dayjs().format('DD-MM-YYYY'); 
   const handleClick = () => {
-    if(localStorage.getItem("currentUser") === "undefined" || localStorage.getItem("currentUser") === "null"){
+    if(localStorage.getItem("currentUser") === "undefined" || localStorage.getItem("currentUser") === "null" || !localStorage.getItem("currentUser")){
       navigate("/login"); 
     } 
     else{

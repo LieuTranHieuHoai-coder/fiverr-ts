@@ -6,7 +6,7 @@
     .container {
       width: 1400px;
       padding: 50px 0px;
-  
+      @media (max-width: 768px) { width: 90%; margin: auto;}
       .title {
         display: flex;
         justify-content: space-between;

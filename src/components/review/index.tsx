@@ -5,7 +5,6 @@ import { ThongTinNguoiDung } from "../../models/ThongTinNguoiDung";
 import { getUsersById } from "./../../apis/apiNguoiDung"
 import { FaStar } from "react-icons/fa6";
 import { usedanhSachBLStore } from "../../store/commentStore";
-import { deleteBinhLuan } from "../../apis/apiBinhLuan";
 import Swal from 'sweetalert2'
 type Props = {
   content: BinhLuanViewModel
@@ -22,7 +21,7 @@ export default function Review(props: Props) {
         return JSON.parse(localStorage.getItem("currentUser") ?? "null");
       });
     } 
-    console.log(localStorage.getItem("currentUser"));
+    //console.log(localStorage.getItem("currentUser"));
   }, []);
 
   useEffect(() => {
