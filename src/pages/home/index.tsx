@@ -1,12 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+
 import "./home.scss";
 import Featured from "../../components/featured";
 import TrustedBy from "../../components/trustedBy";
 import ProjectCard from "../../components/projectCard";
 import Jobs from "../../components/jobs";
-import { useDanhSachThueStore } from "../../store/orderStore";
-import { CongViecThue } from "../../models/CongViecViewModel";
-import { getDanhSachDaThue } from "../../apis/apiThueCongViec";
 
 function Home() {
   return (

@@ -27,7 +27,7 @@ export default function Jobs() {
   }
   return (
     <div>
-      <div className="grid grid-cols-4 md:grid-cols-1 xs:grid-cols-1 gap-4">{renderJobs()}</div>
+      <div className="grid xl:grid-cols-4 md:grid-cols-2 xs:grid-cols-1 gap-4">{renderJobs()}</div>
       <div className="my-5">
         <Pagination
           defaultCurrent={currentPage}

@@ -61,7 +61,7 @@ export default function JobsFilter(props: Props){
   }
   return (
     <div>
-      <div className="grid grid-cols-4 md:grid-cols-1 xs:grid-cols-1 gap-4">{renderJobs()}</div>
+      <div className="grid lg:grid-cols-4 md:grid-cols-2 xs:grid-cols-1 gap-4">{renderJobs()}</div>
       
     </div>
   );

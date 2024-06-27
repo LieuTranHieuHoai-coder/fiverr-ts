@@ -96,7 +96,7 @@ export default function Categories() {
           },
         ]}
       />
-      <div className="flex md:flex-col xs:flex-col items-center">{loadServices()}</div>
+      <div className="flex xs:flex-col md:flex-row items-center">{loadServices()}</div>
 
       {dsChiTietLoai && loadCatItem()}
 

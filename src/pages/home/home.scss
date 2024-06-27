@@ -45,7 +45,7 @@
         display: flex;
         align-items: center;
         gap: 200px;
-        @media (max-width: 768px) { width: 100%; flex-direction: column; gap: 30px;}
+        @media (max-width: 1024px) { width: 90%; flex-direction: column; gap: 30px;}
         .item {
           display: flex;
           flex-direction: column;
@@ -106,7 +106,8 @@
   
       .container {
         width: 1400px;
-        @media (max-width: 768px) { width: 100%; flex-direction: column; align-items: center;}
+        @media (max-width: 1024px) { width: 90%;}
+        @media (max-width: 640px) { width: 90%; flex-direction: column; align-items: center;}
         h1{
           color: #555;
         }
@@ -116,7 +117,8 @@
           display: flex;
           justify-content: space-between;
           flex-wrap: wrap;
-          @media (max-width: 768px) { width: 100%; flex-direction: column; align-items: center;}
+          @media (max-width: 1024px) { width: 90%; align-items: center;}
+          @media (max-width: 640px) { width: 90%; flex-direction: column; align-items: center;}
           .item {
             width: 250px;
             height: 150px;

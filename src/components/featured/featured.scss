@@ -1,6 +1,6 @@
 .featured {
     height: 600px;
-    @media (max-width: 768px) {  height: 400px;}
+    @media (max-width: 1024px) {  height: 400px;}
     display: flex;
     justify-content: center;
     background-color: #013914;
@@ -15,10 +15,11 @@
         display: flex;
         flex-direction: column;
         gap: 30px;
-  
+        @media (max-width: 1024px) { align-items: center;}
         h1 {
           font-size: 50px;
-          @media (max-width: 768px) { font-size: 30px; line-height: 30px;}
+          @media (max-width: 1024px) { font-size: 40px; line-height: 40px; padding:20px;}
+          @media (max-width: 640px) { font-size: 30px; line-height: 30px;}
           span {
             font-style: italic;
             font-weight: 300;
@@ -32,7 +33,8 @@
           align-items: center;
           justify-content: space-between;
           overflow: hidden;
-          @media (max-width: 768px) { width: max-content; }
+          @media (max-width: 1024px) { width: 90%; }
+          @media (max-width: 640px) { width: max-content;}
           .searchInput {
             display: flex;
             align-items: center;
