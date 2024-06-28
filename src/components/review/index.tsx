@@ -2,38 +2,38 @@ import { useEffect, useState } from "react";
 import { BinhLuanViewModel } from "../../models/BinhLuanViewModel";
 import "./review.scss";
 import { ThongTinNguoiDung } from "../../models/ThongTinNguoiDung";
-import { getUsersById } from "./../../apis/apiNguoiDung"
+import { deleteBinhLuan, putBinhLuan } from "../../apis/apiBinhLuan";
+import { getUsersById } from "./../../apis/apiNguoiDung";
 import { FaStar } from "react-icons/fa6";
 import { usedanhSachBLStore } from "../../store/commentStore";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 type Props = {
-  content: BinhLuanViewModel
-}
+  content: BinhLuanViewModel;
+};
 export default function Review(props: Props) {
   const { content } = props;
-  const [inputValue, setInputValue] = useState(content.noiDung)
+  const [inputValue, setInputValue] = useState(content.noiDung);
   const [ttUserId, setTTUserId] = useState<ThongTinNguoiDung>();
   const { remove, update } = usedanhSachBLStore();
   const [currentUser, setUser] = useState<ThongTinNguoiDung>();
+
   useEffect(() => {
-    if(localStorage.getItem("currentUser") !== "undefined"){
-      setUser(()=> {
+    if (localStorage.getItem("currentUser") !== "undefined") {
+      setUser(() => {
         return JSON.parse(localStorage.getItem("currentUser") ?? "null");
       });
-    } 
-    //console.log(localStorage.getItem("currentUser"));
+    }
   }, []);
 
   useEffect(() => {
     async function flecthUser() {
-      if(localStorage.getItem("currentUser") !== "undefined"){
+      if (localStorage.getItem("currentUser") !== "undefined") {
         const data = await getUsersById(content.maNguoiBinhLuan);
         setTTUserId(data);
       }
-      
     }
     flecthUser();
-  }, [content.maNguoiBinhLuan])
+  }, [content.maNguoiBinhLuan]);
 
   function loadStar(number: number) {
     const stars = [];
@@ -46,10 +46,10 @@ export default function Review(props: Props) {
   const updateComment = () => {
     Swal.fire({
       title: "Input something to this comment?",
-      input: 'text',
+      input: "text",
       inputValue,
       preConfirm: () => {
-        setInputValue(Swal.getInput()?.value || content.noiDung)
+        setInputValue(Swal.getInput()?.value || content.noiDung);
       },
       icon: "warning",
       showCancelButton: true,
@@ -58,14 +58,16 @@ export default function Review(props: Props) {
       confirmButtonText: "Yes, modify it",
     }).then((result) => {
       if (result.isConfirmed) {
-        
-        Swal.fire("Updated!", "Your comment has been updated.", "success");
-        const edit = {...content};
-        edit.noiDung = result.value;
-        update(edit);
+        if (content.id) {
+          Swal.fire("Updated!", "Your comment has been updated.", "success");
+          const edit = { ...content };
+          edit.noiDung = result.value;
+          putBinhLuan(content.id, edit);
+          update(edit);
+        }
       }
     });
-  }
+  };
 
   const deleteComment = () => {
     Swal.fire({
@@ -78,22 +80,47 @@ export default function Review(props: Props) {
       confirmButtonText: "Yes, delete it",
     }).then((result) => {
       if (result.isConfirmed) {
-        remove(content.id);
-        Swal.fire("Deleted!", "Your comment has been deleted.", "success");
+        if (content.id) {
+          deleteBinhLuan(content.id);
+          remove(content.id);
+          Swal.fire("Deleted!", "Your comment has been deleted.", "success");
+        }
       }
     });
-  }
+  };
 
-  function renderDeleteBtn(){
-    if(content.tenNguoiBinhLuan === currentUser?.name && currentUser !== undefined && currentUser){
-      return <button className="cursor-pointer border mx-2 py-2 px-8 text-center text-xs leading-tight transition-colors duration-150 ease-in-out hover:border-red-500 rounded-lg" onClick={()=>deleteComment()}>Delete</button>
+  function renderDeleteBtn() {
+    if (
+      content.tenNguoiBinhLuan === currentUser?.name &&
+      currentUser !== undefined &&
+      currentUser
+    ) {
+      return (
+        <button
+          className="cursor-pointer border mx-2 py-2 px-8 text-center text-xs leading-tight transition-colors duration-150 ease-in-out hover:border-red-500 rounded-lg"
+          onClick={() => deleteComment()}
+        >
+          Delete
+        </button>
+      );
     }
     return <></>;
   }
 
-  function renderUpdateBtn(){
-    if(content.tenNguoiBinhLuan === currentUser?.name && currentUser !== undefined && currentUser ){
-      return <button className="cursor-pointer border py-2 px-8 text-center text-xs leading-tight transition-colors duration-150 ease-in-out hover:border-yellow-500 rounded-lg" onClick={()=>updateComment()}>Modify</button>
+  function renderUpdateBtn() {
+    if (
+      content.tenNguoiBinhLuan === currentUser?.name &&
+      currentUser !== undefined &&
+      currentUser
+    ) {
+      return (
+        <button
+          className="cursor-pointer border py-2 px-8 text-center text-xs leading-tight transition-colors duration-150 ease-in-out hover:border-yellow-500 rounded-lg"
+          onClick={() => updateComment()}
+        >
+          Modify
+        </button>
+      );
     }
     return <></>;
   }
@@ -117,16 +144,14 @@ export default function Review(props: Props) {
             {loadStar(content.saoBinhLuan)}
           </div>
 
-          <p className="text-sm">
-            {content.noiDung}
-          </p>
+          <p className="text-sm">{content.noiDung}</p>
           <div className="mt-5 flex items-center justify-between text-gray-600">
             <div className="flex">
               <button className="cursor-pointer border py-2 px-8 text-center text-xs leading-tight transition-colors duration-150 ease-in-out hover:border-gray-500 rounded-lg">
                 Reply
               </button>
-              { renderDeleteBtn() }
-              { renderUpdateBtn() }
+              {renderDeleteBtn()}
+              {renderUpdateBtn()}
             </div>
 
             <a

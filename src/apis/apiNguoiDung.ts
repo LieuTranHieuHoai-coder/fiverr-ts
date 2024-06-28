@@ -38,8 +38,10 @@ export const deleteUsers = async (id: number) => {
 
 export const getUsersById = async (id: string) => {
     try {
-        const response = await api.get("/users/" + id);
-        return response.data.content;
+        if(id){
+            const response = await api.get("/users/" + id);
+            return response.data.content;
+        }
     } catch (error: any) {
         throw Error(error);
     }

@@ -1,6 +1,6 @@
 export interface BinhLuanViewModel {
-  id: number;
-  maCongViec: number;
+  id?: number;
+  maCongViec?: number;
   maNguoiBinhLuan: string;
   ngayBinhLuan: string;
   noiDung?: string;

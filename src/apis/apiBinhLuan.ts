@@ -19,7 +19,7 @@ export const postBinhLuan = async (payload: BinhLuanViewModel) => {
     }
 }
 
-export const putBinhLuan = async (id: number, payload: FormData) => {
+export const putBinhLuan = async (id: number, payload: BinhLuanViewModel) => {
     try {
         const response = await api.put("/binh-luan/" + id, payload);
         return response.data.content; // binhluanviewmodel

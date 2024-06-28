@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Review from "../../components/review";
-import { getBinhLuanTheoCongViec, postBinhLuan } from "./../../apis/apiBinhLuan";
+import {
+  getBinhLuanTheoCongViec,
+  postBinhLuan,
+} from "./../../apis/apiBinhLuan";
 import { BinhLuanViewModel } from "../../models/BinhLuanViewModel";
 import { useForm } from "react-hook-form";
 import dayjs from "dayjs";
@@ -13,13 +16,13 @@ export default function Reviews() {
   const { id } = useParams();
   const { daSachBL, addRanges, add } = usedanhSachBLStore();
   const [currentUser, setUser] = useState<ThongTinNguoiDung>();
-  const navigate = useNavigate();
+
   useEffect(() => {
-    if(localStorage.getItem("currentUser") !== "undefined"){
-      setUser(()=> {
+    if (localStorage.getItem("currentUser") !== "undefined") {
+      setUser(() => {
         return JSON.parse(localStorage.getItem("currentUser") ?? "null");
       });
-    } 
+    }
   }, []);
 
   const {
@@ -44,15 +47,25 @@ export default function Reviews() {
   const onSubmit = async (data: BinhLuanViewModel) => {
     //e.preventDefault();
     try {
-      if(localStorage.getItem("currentUser") === "undefined" || localStorage.getItem("currentUser") === "null"){
+      if (
+        !localStorage.getItem("currentUser") ||
+        localStorage.getItem("currentUser") === "undefined" ||
+        localStorage.getItem("currentUser") === "null"
+      ) {
         Swal.fire("You need login first!");
-      } 
-      else{
-        const res = await postBinhLuan(data);
-        add(res);
+      } else {
+        if (currentUser?.id) {
+          data.maNguoiBinhLuan = currentUser?.id;
+          const res = await postBinhLuan(data);
+          add(res);
+          const comments = await getBinhLuanTheoCongViec(id);
+          addRanges(comments);
+          loadbinhLuan();
+        }
       }
     } catch (err: any) {}
   };
+
   useEffect(() => {
     async function fetchComments() {
       const comments = await getBinhLuanTheoCongViec(id);
@@ -63,12 +76,9 @@ export default function Reviews() {
 
   function loadbinhLuan() {
     //const clone = [...listComments];
-    return daSachBL
-      .reverse()
-      .slice(0, count)
-      .map((comment) => {
-        return <Review key={comment.id} content={comment} />;
-      });
+    return daSachBL.slice(0, count).map((comment) => {
+      return <Review key={comment.id} content={comment} />;
+    });
   }
   return (
     <div>
@@ -135,11 +145,11 @@ export default function Reviews() {
       <div className="mt-5">
         <form className="mb-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-            <label htmlFor="comment" className="sr-only">
+            <label htmlFor="noiDung" className="sr-only">
               Your comment
             </label>
             <textarea
-              id="comment"
+              id="noiDung"
               {...register("noiDung", { required: "Comment is required" })}
               rows={6}
               className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"

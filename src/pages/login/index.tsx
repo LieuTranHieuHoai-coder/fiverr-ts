@@ -57,14 +57,14 @@ function Login() {
           {...register('password', {
             required: 'Password is required',
             minLength: {
-              value: 8,
-              message: 'Password must be at least 8 characters long',
+              value: 4,
+              message: 'Password must be at least 4 characters long',
             },
-            pattern: {
-              value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-              message:
-                'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
-            },
+            // pattern: {
+            //   value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+            //   message:
+            //     'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
+            // },
           })}
         />
         {errors.password && <p className="text-danger font-bold">{errors.password.message}</p>}

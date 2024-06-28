@@ -6,6 +6,7 @@ import { Form, Input, Radio, Upload } from "antd";
 import { authSignUp } from "../../apis/apiAuth";
 import { ThongTinNguoiDung } from "../../models/ThongTinNguoiDung";
 import dayjs from "dayjs";
+import Swal from "sweetalert2";
 
 function Register() {
   const normFile = (e: any) => {
@@ -26,6 +27,24 @@ function Register() {
       data.role = "user";
       const res = await authSignUp(data);
       localStorage.setItem("currentUser", JSON.stringify(res));
+      Swal.fire({
+        title: "Đăng Ký Thành Công",
+        icon: "success",
+        showClass: {
+          popup: `
+            animate__animated
+            animate__fadeInUp
+            animate__faster
+          `
+        },
+        hideClass: {
+          popup: `
+            animate__animated
+            animate__fadeOutDown
+            animate__faster
+          `
+        }
+      });
       navigate("/login");
     } catch (err: any) {
       console.error(err);
@@ -158,7 +177,7 @@ function Register() {
             {errors.gender && (
               <p className="text-danger font-bold">{errors.gender.message}</p>
             )}
-            <label htmlFor="role">Avatar:</label>
+            {/* <label htmlFor="role">Avatar:</label>
             <Form.Item valuePropName="fileList" getValueFromEvent={normFile}>
               <Upload action="/upload.do" listType="picture-card">
                 <button style={{ border: 0, background: "none" }} type="button">
@@ -166,11 +185,12 @@ function Register() {
                   <div style={{ marginTop: 8 }}>Avatar</div>
                 </button>
               </Upload>
-            </Form.Item>
+            </Form.Item> */}
 
             <button
               type="submit"
               className="inline-block rounded bg-success px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-success-3 transition duration-150 ease-in-out hover:bg-success-accent-300 hover:shadow-success-2 focus:bg-success-accent-300 focus:shadow-success-2 focus:outline-none focus:ring-0 active:bg-success-600 active:shadow-success-2 motion-reduce:transition-none"
+              
             >
               Register
             </button>
