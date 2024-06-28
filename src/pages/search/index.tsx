@@ -23,7 +23,7 @@ export default function Search() {
   }
 
   return (
-    <div className="container m-auto ">
+    <div className="container m-auto md:w-11/12">
       <Breadcrumb
         className="my-5"
         items={[
@@ -42,7 +42,7 @@ export default function Search() {
         ]}
       />
       <h2 className="text-4xl my-5"> Results ({lsSearch.length})</h2>
-      <div className="grid grid-cols-4 gap-4">{renderJobs()}</div>
+      <div className="grid lg:grid-cols-4 md:grid-cols-2 xs:grid-cols-1 gap-4">{renderJobs()}</div>
     </div>
   );
 }

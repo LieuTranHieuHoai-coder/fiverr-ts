@@ -49,7 +49,7 @@ export default function Orders() {
         ]}
       />
       <h2 className="text-4xl my-5"> Results ({danhSachThue.length})</h2>
-      <div className="grid grid-cols-4 gap-4">{renderOrder()}</div>
+      <div className="grid lg:grid-cols-4 md:grid-cols-2 xs:grid-cols-1 gap-4">{renderOrder()}</div>
     </div>
   );
 }

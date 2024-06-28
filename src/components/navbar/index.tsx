@@ -98,9 +98,9 @@ function Navbar() {
                     <Link className="link" to="/orders">
                       Orders
                     </Link>
-                    <Link className="link" to="/messages">
+                    {/* <Link className="link" to="/messages">
                       Messages
-                    </Link>
+                    </Link> */}
                     <Link className="link" to="/" onClick={handleLogout}>
                       Logout
                     </Link>
