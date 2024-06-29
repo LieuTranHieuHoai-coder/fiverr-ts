@@ -1,7 +1,6 @@
 import { ThueCongViecViewModel } from "../models/ThueCongViecModel";
 import api from "./apiUtil";
 
-
 export const getThueCongViec = async () => {
     try {
         const response = await api.get("/thue-cong-viec");

@@ -11,6 +11,7 @@ type Props = {
 }
 export default function SaleCard(props: Props) {
   const { value } = props;
+  const { id } = useParams();
   const navigate = useNavigate();
   let index = 0;
   const [danhSachThue, setLst] = useState<CongViecThue[]>([]);
@@ -21,11 +22,11 @@ export default function SaleCard(props: Props) {
     });
   }, []);
 
-  useEffect(() => {
-    getDanhSachDaThue().then((res) => {
-      setLst(res);
-    });
-  }, [()=>handleClick]);
+  // useEffect(() => {
+  //   getDanhSachDaThue().then((res) => {
+  //     setLst(res);
+  //   });
+  // }, [()=>handleClick]);
   const [currentUser, setUser] = useState<ThongTinNguoiDung>(JSON.parse(localStorage.getItem("currentUser") ?? "null")); 
   const currentDate = dayjs().format('DD-MM-YYYY'); 
   const handleClick = () => {
@@ -44,14 +45,17 @@ export default function SaleCard(props: Props) {
         confirmButtonText: "Buy it!"
       }).then(async (result) => {
         if (result.isConfirmed) {
-          
-          for (let i = 0; i < danhSachThue.length; i++) {
-            if (danhSachThue[i].congViec.id === value?.id) {
-              index = i;
-              break;
-            }
-          }
-          if (index !== 0) {
+          await getDanhSachDaThue().then((res) => {
+            setLst(res);
+          });
+          const findid = danhSachThue.findIndex((d) => d.congViec.id === Number(id));
+          // for (let i = 0; i < danhSachThue.length; i++) {
+          //   if (danhSachThue[i].congViec.id === id) {
+          //     index = i;
+          //     break;
+          //   }
+          // }
+          if (findid !== -1) {
             Swal.fire({
               title: "Warning!",
               text: "This job has been hired.",
@@ -60,16 +64,25 @@ export default function SaleCard(props: Props) {
           }
           else{
             await postThueCongViec({
-              maCongViec: value?.id,
+              maCongViec: Number(id),
               maNguoiThue: currentUser.id,
               ngayThue: currentDate,
               hoanThanh: false
+            }).then(async (data) => {
+              await getDanhSachDaThue().then((res) => {
+                setLst(res);
+              });
+              Swal.fire({
+                title: "Successed!",
+                text: "You have successfully.",
+                icon: "success"
+              });
             });
-            Swal.fire({
-              title: "Successed!",
-              text: "You have successfully.",
-              icon: "success"
-            });
+            // Swal.fire({
+            //   title: "Successed!",
+            //   text: "You have successfully.",
+            //   icon: "success"
+            // });
           }
           
         }
