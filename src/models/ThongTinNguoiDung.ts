@@ -12,3 +12,8 @@ export interface ThongTinNguoiDung {
   certification?: [];
   bookingJob?: [];
 }
+
+export interface NguoiDung {
+  token: string;
+  user: ThongTinNguoiDung;
+}

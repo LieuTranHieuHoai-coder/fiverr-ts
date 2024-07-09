@@ -46,10 +46,10 @@ export const getThueCongViecId = async (id: number) => {
     }
 }
 
-export const getThueCongViecPhanTrang = async (pageIndex: number, pageSize: number, keyword: string) => {
+export const getThueCongViecPhanTrang = async (pageIndex: number, pageSize: number, keyword?: string) => {
     try {
         const response = await api.get("/thue-cong-viec/phan-trang-tim-kiem?pageIndex=" + pageIndex + "&pageSize=" + pageSize + "&keyword=" + keyword);
-        return response.data.content;
+        return response.data.content.data;
     } catch (error: any) {
         throw Error(error);
     }

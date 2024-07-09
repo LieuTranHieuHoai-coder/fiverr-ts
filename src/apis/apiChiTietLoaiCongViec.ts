@@ -21,7 +21,7 @@ export const postChiTietLoaiCongViec = async() => {
 export const getChiTietLoaiCongViec_phantrang = async(pageIndex: number, pageSize:number,keyword:string) => {
     try {
         const response = await api.get(`chi-tiet-loai-cong-viec/phan-trang-tim-kiem?pageIndex=${pageIndex}&pageSize=${pageSize}&keyword=${keyword}`);
-        return response.data.content; // list chiTietLoaiCongViecViewModel
+        return response.data.content.data; // list chiTietLoaiCongViecViewModel
     } catch (error:any) {
         throw Error(error);
     }

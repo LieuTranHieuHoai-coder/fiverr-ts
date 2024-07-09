@@ -50,7 +50,7 @@ export const getUsersById = async (id: string) => {
 export const getUserPhanTrang = async (pageIndex:number, pageSize: number, keyword:string) =>{
     try {
         const response = await api.get("/users/phan-trang-tim-kiem?pageIndex=" + pageIndex + "&pageSize=" + pageSize + "&keyword=" + keyword);
-        return response.data.content;
+        return response.data.content.data;
     } catch (error: any) {
         throw Error(error);
     }

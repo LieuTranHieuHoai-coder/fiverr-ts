@@ -4,12 +4,15 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config: any) => {
+  const userLocal = localStorage.getItem("user");
+  const currentUSer = userLocal ? JSON.parse(userLocal) : null;
   config.headers = {
     ...config.headers,
-    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU0NjEiLCJlbWFpbCI6ImxpZXV0cmFuaGlldWhvYWlAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJuYmYiOjE3MTgzNzgyODEsImV4cCI6MTcxODk4MzA4MX0.DowmN6hQd66E_tUcW80UJFIOW4UjE_H-T3qf9cZR8gQ",
+    token: currentUSer ? currentUSer.accessToken : "",
     tokenCybersoft:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA2MiIsIkhldEhhblN0cmluZyI6IjE3LzEwLzIwMjQiLCJIZXRIYW5UaW1lIjoiMTcyOTEyMzIwMDAwMCIsIm5iZiI6MTcwMDE1NDAwMCwiZXhwIjoxNzI5MjcwODAwfQ.xKQVYYnO9233wkXRw5oU4Dtx41flqDuUnA0DbkDYRmM",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJOb2RlSlMgNDMiLCJIZXRIYW5TdHJpbmciOiIxNS8wMS8yMDI1IiwiSGV0SGFuVGltZSI6IjE3MzY4OTkyMDAwMDAiLCJuYmYiOjE3MTk0MjEyMDAsImV4cCI6MTczNzA0NjgwMH0._1nNTer6EQJycfH9UBD3WvpKecB92OKCg9GEyX6eSSc"
   };
+  console.log(currentUSer);
   return config;
 });
 

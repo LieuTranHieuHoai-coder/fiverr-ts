@@ -25,7 +25,15 @@ function Login() {
         password: data.password,
       });
       localStorage.setItem("currentUser", JSON.stringify(res.user));
-      navigate("/");
+      localStorage.setItem("user", JSON.stringify(res));
+      if (res.user.role === "ADMIN" || res.user.role === "admin") {
+        navigate("/admin/loai-cong-viec");
+      }
+      else
+      {
+        navigate("/");
+      }
+      
     } catch (err: any) {
       setLoginError('Invalid email or password');
     }
