@@ -61,6 +61,13 @@ export default function Reviews() {
           const comments = await getBinhLuanTheoCongViec(id);
           addRanges(comments);
           loadbinhLuan();
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Your work has been saved",
+            showConfirmButton: false,
+            timer: 1500
+          });
         }
       }
     } catch (err: any) {}

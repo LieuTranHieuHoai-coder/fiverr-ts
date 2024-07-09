@@ -13,7 +13,7 @@ export const usedanhSachBLStore = create<BinhLuanStore>((set) => ({
   daSachBL: [], // Initialize user as an empty array
   addRanges: (lst) =>
     set((state) => ({
-      daSachBL: [...lst],
+      daSachBL: [...lst.reverse()],
     })),
   update: (item) => set((state) => ({
     daSachBL: state.daSachBL.map((i) =>
