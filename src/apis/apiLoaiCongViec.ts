@@ -38,7 +38,7 @@ export const getLoaiCogViecTheoId = async (id?:string) => {
     }
 }
 
-export const putLoaiCongViec = async (id:number, payload: FormData) => {
+export const putLoaiCongViec = async (id:number, payload: LoaiCongViecItem) => {
     try {
         const response = await api.put(`/loai-cong-viec/${id}`, payload);
         return response.data.content;

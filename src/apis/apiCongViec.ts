@@ -36,7 +36,7 @@ export const getCongViec = async () => {
     }
  }
 
- export const putCongViec = async (id: number, payload: CongViecViewModel) => {
+ export const putCongViec = async (id?: number, payload?: CongViecViewModel) => {
     try {
         const response = await api.put("/cong-viec/" + id, payload);
         return response.data.content; // congviecviewmodel

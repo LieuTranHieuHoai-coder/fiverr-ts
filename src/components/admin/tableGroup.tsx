@@ -1,8 +1,8 @@
 import React, { MouseEventHandler, useEffect, useState } from 'react';
-import { Button, Input, Space, Table } from 'antd';
+import { Button, ConfigProvider, Input, Modal, Space, Table } from 'antd';
 import type { TableColumnsType } from 'antd';
 import { DeleteOutlined, EditOutlined, PlusSquareOutlined } from '@ant-design/icons';
-import { getLoaiCogViec, postLoaiCongViec, putLoaiCongViec, deleteLoaiCongViec } from '../../apis/apiLoaiCongViec';
+import { getLoaiCogViec, postLoaiCongViec, putLoaiCongViec, deleteLoaiCongViec, getLoaiCogViecTheoId } from '../../apis/apiLoaiCongViec';
 import { useDanhSachLoaiCongViecStore } from '../../store/groupCategoryStore';
 import { LoaiCongViecViewModel } from '../../models/LoaiCongViecModel';
 import dayjs from 'dayjs';
@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 
 
 export default function TableGroup() {
-  const { danhSachLoaiCongViec, addRanges, add } = useDanhSachLoaiCongViecStore();
+  const { danhSachLoaiCongViec, addRanges, add, update } = useDanhSachLoaiCongViecStore();
   useEffect(() => {
     getLoaiCogViec().then((res) => {
       addRanges(res);
@@ -37,11 +37,9 @@ export default function TableGroup() {
           timer: 1000
         });
       });
-    });  
+    });
   };
 
-  const handleEditClick = (id: number | undefined) => {
-  };
 
   const handleDeleteClick = (id: number | undefined) => {
     Swal.fire({
@@ -66,10 +64,12 @@ export default function TableGroup() {
             });
           });
         }).catch((err) => {
-          Swal.fire({title: "Something went wrong",
+          Swal.fire({
+            title: "Something went wrong",
             text: err.message,
-            icon: "error",});
-        });  
+            icon: "error",
+          });
+        });
       }
     });
   };
@@ -84,7 +84,7 @@ export default function TableGroup() {
       defaultSortOrder: 'descend',
       sorter: (a, b) => Number(a.id) - Number(b.id),
       //sortDirections: ['descend'],
-      
+
     },
     {
       title: 'Group Name',
@@ -98,34 +98,109 @@ export default function TableGroup() {
       key: 'operation',
       fixed: 'right',
       width: 100,
-      render: (_, {id}) =>
+      render: (_, { id, tenLoaiCongViec }) =>
       (
         <>
           <div className="flex">
             <div className="mr-2">
-              <Button type="primary" icon={<EditOutlined />} onClick={()=>handleEditClick(id)}>
+              <Button type="primary" icon={<EditOutlined />} onClick={() => showModal(id, tenLoaiCongViec)}>
                 Edit
               </Button>
+
             </div>
             <div>
-              <Button type="primary" danger icon={<DeleteOutlined />} onClick={()=>handleDeleteClick(id)}>
+              <Button type="primary" danger icon={<DeleteOutlined />} onClick={() => handleDeleteClick(id)}>
                 Delete
               </Button>
             </div>
+
           </div>
+
         </>
       ),
     },
   ];
 
+  //open modal
+
+  const [openMD, setOpenMD] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [editId, setEditId] = useState<number>();
+  const [editTen, setEditTen] = useState('');
+  const showModal = (id?: number, tenLoaiCongViec?: string) => {
+    if (id !== undefined && tenLoaiCongViec !== undefined) {
+      setEditId(id);
+      setEditTen(tenLoaiCongViec);
+    }
+    setOpenMD(true);
+  };
+
+  const handleOk = () => {
+    if (editId !== undefined) {
+      putLoaiCongViec(editId, { tenLoaiCongViec: editValue })
+        .then((res) => {
+          getLoaiCogViec().then((res) => {
+            addRanges(res);
+          });
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Your work has been saved",
+            showConfirmButton: false,
+            timer: 1000,
+          });
+
+        })
+        .catch((err) => {
+          Swal.fire({
+            title: "Something went wrong",
+            text: err.message,
+            icon: "error",
+          });
+        });
+    }
+    setOpenMD(false);
+  };
+
+  const handleCancelMD = () => {
+    setOpenMD(false);
+  };
+  const [editValue, setEditValue] = useState('');
+  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditValue(event.target.value);
+  };
   return (
     <>
       <div className='mb-5'>
         <Space.Compact style={{ width: '100%' }}>
-          <Input placeholder='Add a new group' onChange={handleInputChange} value={inputValue}/>
+          <Input placeholder='Add a new group' onChange={handleInputChange} value={inputValue} />
           <Button type="primary" onClick={handleButtonClick}>Submit</Button>
         </Space.Compact>
       </div>
       <Table columns={columns} dataSource={danhSachLoaiCongViec} scroll={{ x: 1000, y: "100vh" }} />
+      <ConfigProvider
+        theme={{
+          token: {
+            colorBgMask: "rgba(0, 0, 0, 0.15)"
+          },
+        }}
+      >
+        <Modal
+          title="Edit"
+
+          open={openMD}
+          onOk={() => handleOk()}
+          confirmLoading={confirmLoading}
+          onCancel={handleCancelMD}
+        >
+          <input
+            placeholder={editTen}
+            type="text"
+            onChange={handleOnChange}
+            id="146be7d9-143d-43de-a117-4f55446ed317"
+            className="m-5 w-11/12 block rounded-lg border dark:border-none py-[9px] px-3 pr-4 text-sm focus:border-blue-400 focus:ring-1 focus:ring-blue-400 focus:outline-none"
+          />
+        </Modal>
+      </ConfigProvider>
     </>)
 }

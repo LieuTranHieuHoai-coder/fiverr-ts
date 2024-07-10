@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import { deleteCongViec , getCongViec} from '../../apis/apiCongViec';
 import { PAGE_SIZE } from '../../constants/pagesize';
 import Swal from 'sweetalert2';
+import EditCongViec from './btnEditCongViec';
 
 
 export default function TableCongViec() {
@@ -139,17 +140,15 @@ export default function TableCongViec() {
       key: 'operation',
       fixed: 'right',
       width: 100,
-      render: (_, {id}) =>
+      render: (_, item) =>
         (
           <>
             <div className="flex">
               <div className="mr-2">
-                <Button type="primary" icon={<EditOutlined />} onClick={()=>handleEditClick(Number(id))}>
-                  Edit
-                </Button>
+                <EditCongViec congViec={item}></EditCongViec>
               </div>
               <div>
-                <Button type="primary" danger icon={<DeleteOutlined />} onClick={()=>handleDeleteClick(Number(id))}>
+                <Button type="primary" danger icon={<DeleteOutlined />} onClick={()=>handleDeleteClick(Number(item.id))}>
                   Delete
                 </Button>
               </div>

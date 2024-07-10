@@ -16,7 +16,7 @@ export const useDanhSachLoaiCongViecStore = create<LoaiCongViecStore>((set) => (
             danhSachLoaiCongViec: [...lst],
         })),
     update: (item) => set((state) => ({
-        danhSachLoaiCongViec: state.danhSachLoaiCongViec.map(x => x.id === item.id? item : x)
+        danhSachLoaiCongViec: state.danhSachLoaiCongViec.map(x => x.id === item.id ? item : x)
     })),
     remove: (id) => set((state) => ({
         danhSachLoaiCongViec: state.danhSachLoaiCongViec.filter(x => x.id!== id)
