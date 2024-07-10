@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { ChiTietLoaiCongViecViewModel } from "../models/ChiTietLoaiCongViecViewModel";
+import { ChiTietLoaiView } from "../models/ChiTietLoaiView";
 
 
 type ChiTietLoaiCongViecStore = {

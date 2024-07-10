@@ -24,13 +24,16 @@ function Login() {
         email: data.email,
         password: data.password,
       });
-      localStorage.setItem("currentUser", JSON.stringify(res.user));
-      localStorage.setItem("user", JSON.stringify(res));
+      
       if (res.user.role === "ADMIN" || res.user.role === "admin") {
+        localStorage.setItem("currentUser", JSON.stringify(res.user));
+        localStorage.setItem("user", JSON.stringify(res));
         navigate("/admin/loai-cong-viec");
       }
       else
       {
+        localStorage.setItem("currentUser", JSON.stringify(res.user));
+        localStorage.setItem("user", "");
         navigate("/");
       }
       

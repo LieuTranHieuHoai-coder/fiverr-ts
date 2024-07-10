@@ -3,13 +3,14 @@ import { Button, Input, Space, Table, Tag } from 'antd';
 import type { TableColumnsType } from 'antd';
 import { DeleteOutlined, EditOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import { getThueCongViec } from '../../apis/apiThueCongViec';
+import { getThueCongViec, deleteThueCongViec, putThueCongViec } from '../../apis/apiThueCongViec';
 import { useDanhSachThueStore } from '../../store/orderStore';
 import { CongViecThue } from '../../models/CongViecViewModel';
+import Swal from 'sweetalert2';
 
 
 export default function TableThueCongViec() {
-  const { danhSachThue, addRanges, add } = useDanhSachThueStore();
+  const { danhSachThue, addRanges, remove } = useDanhSachThueStore();
   useEffect(() => {
     getThueCongViec().then((res) => {
       addRanges(res);
@@ -29,7 +30,37 @@ export default function TableThueCongViec() {
   //   });
 
   // };
+  const handleEditClick = (id: number | undefined) => {
+  };
 
+  const handleDeleteClick = (id: number) => {
+    Swal.fire({
+      title: "Would you want to delete?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        remove(id);
+        deleteThueCongViec(id).then((res) => {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Your work has been saved",
+            showConfirmButton: false,
+            timer: 1000
+          });
+        }).catch((err) => {
+          Swal.fire({title: "Something went wrong",
+            text: err.message,
+            icon: "error",});
+        });  
+      }
+    });
+  };
 
   const columns: TableColumnsType<CongViecThue> = [
     {
@@ -83,23 +114,23 @@ export default function TableThueCongViec() {
       key: 'operation',
       fixed: 'right',
       width: 100,
-      render: () =>
-      (
-        <>
-          <div className="flex">
-            <div className="mr-2">
-              <Button type="primary" icon={<EditOutlined />} >
-                Edit
-              </Button>
+      render: (_, {id}) =>
+        (
+          <>
+            <div className="flex">
+              <div className="mr-2">
+                <Button type="primary" icon={<EditOutlined />} onClick={()=>handleEditClick(id)}>
+                  Edit
+                </Button>
+              </div>
+              <div>
+                <Button type="primary" danger icon={<DeleteOutlined />} onClick={()=>handleDeleteClick(id)}>
+                  Delete
+                </Button>
+              </div>
             </div>
-            <div>
-              <Button type="primary" danger icon={<DeleteOutlined />}>
-                Delete
-              </Button>
-            </div>
-          </div>
-        </>
-      ),
+          </>
+        ),
     },
   ];
 

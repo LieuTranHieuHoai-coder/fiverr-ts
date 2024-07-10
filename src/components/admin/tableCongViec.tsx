@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Input, Space, Table } from 'antd';
+import { Button, Table } from 'antd';
 import type { TableColumnsType } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { getLoaiCogViec } from '../../apis/apiLoaiCongViec';
 import { usedanhSachCongViecStore } from '../../store/congviecStore';
 import { CongViecViewModel } from '../../models/CongViecViewModel';
 import dayjs from 'dayjs';
-import { getApiCongViecPhanTrang , getCongViec} from '../../apis/apiCongViec';
+import { deleteCongViec , getCongViec} from '../../apis/apiCongViec';
 import { PAGE_SIZE } from '../../constants/pagesize';
+import Swal from 'sweetalert2';
 
 
 export default function TableCongViec() {
-  const { danhSachCongViec, addRanges, add } = usedanhSachCongViecStore();
+  const { danhSachCongViec, addRanges, add , remove} = usedanhSachCongViecStore();
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -33,7 +33,41 @@ export default function TableCongViec() {
     });
   };
 
+  const handleEditClick = (id: number | undefined) => {
+  };
 
+  const handleDeleteClick = (id: number) => {
+    Swal.fire({
+      title: "Would you want to delete?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteCongViec(id).then((res) => {
+          remove(id);
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Your work has been saved",
+            showConfirmButton: false,
+            timer: 1000
+          });
+          
+          // getCongViec().then((res) => {
+          //   addRanges(res);
+          // });
+        }).catch((err) => {
+          Swal.fire({title: "Something went wrong",
+            text: err.message,
+            icon: "error",});
+        });  
+      }
+    });
+  };
   const columns: TableColumnsType<CongViecViewModel> = [
     {
       title: 'ID',
@@ -105,23 +139,23 @@ export default function TableCongViec() {
       key: 'operation',
       fixed: 'right',
       width: 100,
-      render: () =>
-      (
-        <>
-          <div className="flex">
-            <div className="mr-2">
-              <Button type="primary" icon={<EditOutlined />} >
-                Edit
-              </Button>
+      render: (_, {id}) =>
+        (
+          <>
+            <div className="flex">
+              <div className="mr-2">
+                <Button type="primary" icon={<EditOutlined />} onClick={()=>handleEditClick(Number(id))}>
+                  Edit
+                </Button>
+              </div>
+              <div>
+                <Button type="primary" danger icon={<DeleteOutlined />} onClick={()=>handleDeleteClick(Number(id))}>
+                  Delete
+                </Button>
+              </div>
             </div>
-            <div>
-              <Button type="primary" danger icon={<DeleteOutlined />}>
-                Delete
-              </Button>
-            </div>
-          </div>
-        </>
-      ),
+          </>
+        ),
     },
   ];
 

@@ -5,14 +5,15 @@ import { DeleteOutlined, EditOutlined, PlusSquareOutlined, UserOutlined } from '
 import dayjs from 'dayjs';
 import { PAGE_SIZE } from '../../constants/pagesize';
 import { useNguoiDungStore } from '../../store/userStore';
-import { getUserPhanTrang } from '../../apis/apiNguoiDung';
+import { getUserPhanTrang, getUsers, deleteUsers } from '../../apis/apiNguoiDung';
 import { ThongTinNguoiDung } from '../../models/ThongTinNguoiDung';
+import Swal from 'sweetalert2';
 
 
 export default function TableNguoiDung() {
-  const { lstUsers, addRanges, add } = useNguoiDungStore();
+  const { lstUsers, addRanges, remove } = useNguoiDungStore();
   useEffect(() => {
-    getUserPhanTrang(1,PAGE_SIZE,"").then((res) => {
+    getUsers().then((res) => {
       addRanges(res);
     });
   }, []);
@@ -31,7 +32,40 @@ export default function TableNguoiDung() {
 
   // };
 
+  const handleEditClick = (id: number | undefined) => {
+  };
 
+  const handleDeleteClick = (id: number) => {
+    Swal.fire({
+      title: "Would you want to delete?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        
+        deleteUsers(id).then((res) => {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Your work has been saved",
+            showConfirmButton: false,
+            timer: 1000
+          });
+          getUsers().then((res) => {
+            addRanges(res);
+          });
+        }).catch((err) => {
+          Swal.fire({title: "Something went wrong",
+            text: err.message,
+            icon: "error",});
+        });  
+      }
+    });
+  };
   const columns: TableColumnsType<ThongTinNguoiDung> = [
     {
       title: 'ID',
@@ -106,23 +140,23 @@ export default function TableNguoiDung() {
       key: 'operation',
       fixed: 'right',
       width: 100,
-      render: () =>
-      (
-        <>
-          <div className="flex">
-            <div className="mr-2">
-              <Button type="primary" icon={<EditOutlined />} >
-                Edit
-              </Button>
+      render: (_, {id}) =>
+        (
+          <>
+            <div className="flex">
+              <div className="mr-2">
+                <Button type="primary" icon={<EditOutlined />} onClick={()=>handleEditClick(Number(id))}>
+                  Edit
+                </Button>
+              </div>
+              <div>
+                <Button type="primary" danger icon={<DeleteOutlined />} onClick={()=>handleDeleteClick(Number(id))}>
+                  Delete
+                </Button>
+              </div>
             </div>
-            <div>
-              <Button type="primary" danger icon={<DeleteOutlined />}>
-                Delete
-              </Button>
-            </div>
-          </div>
-        </>
-      ),
+          </>
+        ),
     },
   ];
 

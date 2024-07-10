@@ -29,7 +29,7 @@ export const putUsers = async (id: number, payload: FormData) => {
 
 export const deleteUsers = async (id: number) => {
     try {
-        const response = await api.delete("/users/" + id);
+        const response = await api.delete("/users?id=" + id);
         return response.data.content;
     } catch (error: any) {
         throw Error(error);
