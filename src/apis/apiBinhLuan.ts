@@ -19,7 +19,7 @@ export const postBinhLuan = async (payload: BinhLuanViewModel) => {
     }
 }
 
-export const putBinhLuan = async (id: number, payload: BinhLuanViewModel) => {
+export const putBinhLuan = async (id?: number, payload?: BinhLuanViewModel) => {
     try {
         const response = await api.put("/binh-luan/" + id, payload);
         return response.data.content; // binhluanviewmodel
@@ -27,7 +27,7 @@ export const putBinhLuan = async (id: number, payload: BinhLuanViewModel) => {
         throw Error(error);
     }
 }
-export const deleteBinhLuan = async (id: number) => {
+export const deleteBinhLuan = async (id?: number) => {
     try {
         const response = await api.delete("/binh-luan/" + id);
         return response.data.content; // binhluanviewmodel

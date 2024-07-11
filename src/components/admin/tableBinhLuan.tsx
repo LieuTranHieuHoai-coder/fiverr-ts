@@ -2,11 +2,13 @@ import React, { MouseEventHandler, useEffect, useState } from 'react';
 import { Button, Input, Space, Table } from 'antd';
 import type { TableColumnsType } from 'antd';
 import { DeleteOutlined, EditOutlined, PlusSquareOutlined } from '@ant-design/icons';
-import { getBinhLuan } from '../../apis/apiBinhLuan';
+import { deleteBinhLuan, getBinhLuan } from '../../apis/apiBinhLuan';
 import { usedanhSachBLStore } from '../../store/commentStore';
 import { LoaiCongViecViewModel } from '../../models/LoaiCongViecModel';
 import dayjs from 'dayjs';
 import { BinhLuanViewModel } from '../../models/BinhLuanViewModel';
+import EditBinhLuan from './btnEditBinhLuan';
+import Swal from 'sweetalert2';
 
 
 export default function TableBinhLuan() {
@@ -23,14 +25,46 @@ export default function TableBinhLuan() {
     setInputValue(event.target.value);
   };
 
-
+  const handleDeleteClick = (id: number | undefined) => {
+    Swal.fire({
+      title: "Would you want to delete?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteBinhLuan(id)
+          .then((res) => {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Your work has been saved",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+            getBinhLuan().then((res) => {
+              addRanges(res);
+            });
+          })
+          .catch((err) => {
+            Swal.fire({
+              title: "Something went wrong",
+              text: err.message,
+              icon: "error",
+            });
+          });
+      }
+    });
+  };
   const columns: TableColumnsType<BinhLuanViewModel> = [
     {
       title: 'ID',
       width: 50,
       dataIndex: 'id',
       key: "id",
-      fixed: 'left',
       sorter: (a, b) => Number(a.id) - Number(b.id),
       sortDirections: ['descend'],
     },
@@ -39,39 +73,38 @@ export default function TableBinhLuan() {
       width: 70,
       dataIndex: 'maNguoiBinhLuan',
       key: 'maNguoiBinhLuan',
-      fixed: 'left',
     },
     {
       title: 'Ngày bình luận',
       width: 100,
       dataIndex: 'ngayBinhLuan',
       key: 'ngayBinhLuan',
-      fixed: 'left',
     },
     {
       title: 'Nội dung',
       width: 170,
       dataIndex: 'noiDung',
       key: 'noiDung',
-      fixed: 'left',
     },
-    
+    {
+      title: 'Sao bình luận',
+      width: 70,
+      dataIndex: 'saoBinhLuan',
+      key: 'saoBinhLuan',
+    },
     {
       title: 'Action',
       key: 'operation',
-      fixed: 'right',
       width: 100,
-      render: () =>
+      render: (_,item) =>
       (
         <>
           <div className="flex">
             <div className="mr-2">
-              <Button type="primary" icon={<EditOutlined />} >
-                Edit
-              </Button>
+              <EditBinhLuan binhluan={item}></EditBinhLuan>
             </div>
             <div>
-              <Button type="primary" danger icon={<DeleteOutlined />}>
+              <Button type="primary" danger icon={<DeleteOutlined />} onClick={()=>handleDeleteClick(item.id)}>
                 Delete
               </Button>
             </div>
