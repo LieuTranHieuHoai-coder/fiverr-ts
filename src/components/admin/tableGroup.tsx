@@ -32,7 +32,7 @@ export default function TableGroup() {
         Swal.fire({
           position: "center",
           icon: "success",
-          title: "Your work has been saved",
+          title: "Hoàn tất",
           showConfirmButton: false,
           timer: 1000
         });
@@ -43,13 +43,13 @@ export default function TableGroup() {
 
   const handleDeleteClick = (id: number | undefined) => {
     Swal.fire({
-      title: "Would you want to delete?",
-      text: "You won't be able to revert this!",
+      title: "Bạn có chắc không?",
+      text: "Dữ liệu sẽ bị xóa vĩnh viễn!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Đồng ý!",
     }).then((result) => {
       if (result.isConfirmed) {
         deleteLoaiCongViec(id).then(() => {
@@ -58,7 +58,7 @@ export default function TableGroup() {
             Swal.fire({
               position: "center",
               icon: "success",
-              title: "Your work has been saved",
+              title: "Hoàn tất",
               showConfirmButton: false,
               timer: 1000
             });
@@ -104,13 +104,13 @@ export default function TableGroup() {
           <div className="flex">
             <div className="mr-2">
               <Button type="primary" icon={<EditOutlined />} onClick={() => showModal(id, tenLoaiCongViec)}>
-                Edit
+                Chỉnh sửa
               </Button>
 
             </div>
             <div>
               <Button type="primary" danger icon={<DeleteOutlined />} onClick={() => handleDeleteClick(id)}>
-                Delete
+                Xóa
               </Button>
             </div>
 
@@ -145,7 +145,7 @@ export default function TableGroup() {
           Swal.fire({
             position: "center",
             icon: "success",
-            title: "Your work has been saved",
+            title: "Hoàn tất",
             showConfirmButton: false,
             timer: 1000,
           });
@@ -173,7 +173,7 @@ export default function TableGroup() {
     <>
       <div className='mb-5'>
         <Space.Compact style={{ width: '100%' }}>
-          <Input placeholder='Add a new group' onChange={handleInputChange} value={inputValue} />
+          <Input placeholder='Thêm loại công việc' onChange={handleInputChange} value={inputValue} />
           <Button type="primary" onClick={handleButtonClick}>Submit</Button>
         </Space.Compact>
       </div>
@@ -186,8 +186,8 @@ export default function TableGroup() {
         }}
       >
         <Modal
-          title="Edit"
-
+          title="Chỉnh sửa loại công việc"
+          
           open={openMD}
           onOk={() => handleOk()}
           confirmLoading={confirmLoading}

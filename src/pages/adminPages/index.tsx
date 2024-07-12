@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { BankOutlined, HomeOutlined, PieChartOutlined, RightCircleOutlined, UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, MenuProps, theme } from 'antd';
+import { BankOutlined, HomeOutlined, PieChartOutlined, PoweroffOutlined, RightCircleOutlined, UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { Breadcrumb, Button, Layout, Menu, MenuProps, theme } from 'antd';
 import Dashboard from './dashboard';
-import { Link, Outlet, useParams } from 'react-router-dom';
+import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
 import "./dashboard/dashboard.scss"
 
 export default function Admin() {
     const { Header, Content, Footer, Sider } = Layout;
     type MenuItem = Required<MenuProps>["items"][number];
-
+    const userLocal = localStorage.getItem("user");
+    const currentUSer = userLocal ? JSON.parse(userLocal) : null;
+    const navigate = useNavigate();
     function getItem(
         label: React.ReactNode,
         key: React.Key,
@@ -51,9 +53,6 @@ export default function Admin() {
         getItem("Bình luận", "6", <RightCircleOutlined />, [], "/admin/binh-luan"),
 
     ];
-    const {
-        token: { colorBgContainer, borderRadiusLG },
-    } = theme.useToken();
 
     const [collapsed, setCollapsed] = useState(false);
 
@@ -70,6 +69,11 @@ export default function Admin() {
             window.removeEventListener("resize", handleResize);
         };
     }, []);
+    const LinkLogin = () => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("currentUser");
+        navigate("/login");
+    }
     return (
         <Layout>
             <Sider
@@ -92,18 +96,29 @@ export default function Admin() {
                 </div>
                 <Menu
                     theme="dark"
-                    
+
                     mode="inline"
                     items={items}
                 />
             </Sider>
             <Layout>
-                <Header style={{ padding: 0, background: colorBgContainer }} />
+                <Header style={{ background: "#ffffff", width: "100%" }}>
+                    <div className="block text-end">
+                        <span className='mx-5 font-bold text-xl'>{currentUSer.user.name}</span>
+                        <Button
+                            type="primary" danger
+                            icon={<PoweroffOutlined />}
+                            onClick={LinkLogin}
+                        >
+                            Đăng xuất
+                        </Button>
+                    </div>
+                </Header>
                 <Content style={{ margin: '24px 16px 0' }}>
                     <Outlet />
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
-                    Ant Design ©{new Date().getFullYear()} Created by Ant UED
+                    {new Date().getFullYear()} Created by Lieu Tran Hieu Hoai
                 </Footer>
             </Layout>
         </Layout>

@@ -39,7 +39,7 @@ const AddNewGroup: React.FC = () => {
           </Space>
         }
       >
-        <Form layout="vertical" hideRequiredMark>
+        <Form layout="vertical" >
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item

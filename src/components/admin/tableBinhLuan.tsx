@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 
 
 export default function TableBinhLuan() {
+  const { Search } = Input;
   const { daSachBL, addRanges, add } = usedanhSachBLStore();
   useEffect(() => {
     getBinhLuan().then((res) => {
@@ -114,14 +115,45 @@ export default function TableBinhLuan() {
     },
   ];
 
+  const [filteredData, setFilteredData] = React.useState(daSachBL);
+  useEffect(() => {
+    setFilteredData(daSachBL);
+  }, [daSachBL]);
+  const [searchText, setSearchText] = React.useState('');
+  const handleSearchClick = () => {
+    const filtered = daSachBL.filter((item) =>
+      Object.values(item).some((value) =>
+        value.toString().toLowerCase().includes(searchText.toLowerCase())
+      )
+    );
+    setFilteredData(filtered);
+  };
+  const handleSearch = (event: any) => {
+    const text = event.target.value;
+    setSearchText(text);
+    const filtered = daSachBL.filter((item) =>
+      Object.values(item).some((value) =>
+        value.toString().toLowerCase().includes(text.toLowerCase())
+      )
+    );
+    setFilteredData(filtered);
+  };
   return (
     <>
-      <div className='mb-5'>
-        {/* <Space.Compact style={{ width: '100%' }}>
-          <Input placeholder='Add a new group' onChange={handleInputChange} value={inputValue}/>
-          <Button type="primary" onClick={handleButtonClick}>Submit</Button>
-        </Space.Compact> */}
+      <div className='mb-5 flex justify-between'>
+        {/* <EditCongViec congViec={undefined}></EditCongViec> */}
+        <Space style={{ marginBottom: 16 }}>
+          <Search
+            placeholder="Tìm kiếm"
+            allowClear
+            enterButton="Search"
+            size="large"
+            onChange={handleSearch}
+            onSearch={handleSearchClick}
+          />
+        </Space>
+
       </div>
-      <Table columns={columns} dataSource={daSachBL} scroll={{ x: 1000, y: "100vh" }} />
+      <Table columns={columns} dataSource={filteredData} scroll={{ x: 1000, y: "100vh" }} />
     </>)
 }

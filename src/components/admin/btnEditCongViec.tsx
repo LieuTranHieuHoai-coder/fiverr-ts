@@ -21,22 +21,43 @@ import {
   Space,
 } from "antd";
 import { CongViecViewModel } from "../../models/CongViecViewModel";
-import { putCongViec, getCongViec } from "../../apis/apiCongViec";
+import { putCongViec, getCongViec, postCongViec, uploadHinhCongViec } from "../../apis/apiCongViec";
 import Swal from "sweetalert2";
 import { usedanhSachCongViecStore } from "../../store/congviecStore";
 
 const { Option } = Select;
 
 type Props = {
-  congViec: CongViecViewModel;
+  congViec?: CongViecViewModel;
 };
-export default function btnEditCongViec(props: Props) {
+export default function EditCongViec(props: Props) {
+  const userLocal = localStorage.getItem("user");
+  const currentUSer = userLocal ? JSON.parse(userLocal) : null;
   const [open, setOpen] = useState(false);
   const { addRanges } = usedanhSachCongViecStore();
   const showDrawer = () => {
     setOpen(true);
   };
-
+  const [filebase64, setFileBase64] = useState<string>("");
+  const [image,setImage] = useState<File>();
+  function convertFile(event: React.ChangeEvent<HTMLInputElement>) {
+    if (event.target.files) {
+      const fileRef = event.target.files[0] || ""
+      const fileType: string = fileRef.type || ""
+      setImage(fileRef)
+      const reader = new FileReader()
+      reader.readAsBinaryString(fileRef)
+      reader.onload = (ev: any) => {
+        // convert it to base64
+        setFileBase64(`data:${fileType};base64,${btoa(ev.target.result)}`)
+      }
+    }
+  }
+  // function formSubmit(e: any) {
+  //   e.preventDefault();
+  //   console.log({ filebase64 })
+  //   alert("here you'd submit the form using\n the filebase64 like any other field")
+  // }
   const onClose = () => {
     setOpen(false);
   };
@@ -44,37 +65,80 @@ export default function btnEditCongViec(props: Props) {
   const formRef = React.useRef<FormInstance<CongViecViewModel>>(null);
   const getFormValues = () => {
     const values = formRef.current?.getFieldsValue();
-    putCongViec(congViec.id, values)
-      .then(() => {
-        getCongViec().then((res) => {
-          addRanges(res);
+    if (!congViec) {
+      return postCongViec(values)
+        .then((res) => {
+          if(image){
+            const formData = new FormData();
+            formData.append('file', image);
+            uploadHinhCongViec(res.id,formData);
+          }
+          
+          getCongViec().then((res) => {
+            addRanges(res);
+          });
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Hoàn tất",
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        })
+        .catch((err) => {
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Error",
+            text: err.message,
+          });
         });
-        Swal.fire({
-          position: "center",
-          icon: "success",
-          title: "Your work has been saved",
-          showConfirmButton: false,
-          timer: 1000,
+    } else {
+      
+      putCongViec(congViec?.id, values)
+        .then((res) => {
+          getCongViec().then((res) => {
+            addRanges(res);
+          });
+          if(image){
+            const formData = new FormData();
+            formData.append("formFile",image);
+            uploadHinhCongViec(congViec?.id,image);
+          }
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Hoàn tất",
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        })
+        .catch((err) => {
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Error",
+            text: err.message,
+          });
         });
-      })
-      .catch((err) => {
-        Swal.fire({
-          position: "center",
-          icon: "error",
-          title: "Error",
-          text: err.message,
-        });
-      });
+    }
     setOpen(false);
   };
 
   return (
     <>
-      <Button type="primary" onClick={showDrawer} icon={<EditOutlined />}>
-        Chỉnh sửa
-      </Button>
+      {
+        !congViec
+          ? (<><Button size="large" type="primary" onClick={showDrawer} icon={<PlusOutlined />}>
+            Thêm
+          </Button></>)
+          : (<Button type="primary" onClick={showDrawer} icon={<EditOutlined />}>
+            Chỉnh sửa
+          </Button>)
+      }
+
       <Drawer
-        title="Edit"
+        title={!congViec ? "Thêm công việc" : "Chỉnh sửa công việc"}
         width={720}
         onClose={onClose}
         open={open}
@@ -98,11 +162,11 @@ export default function btnEditCongViec(props: Props) {
               <Form.Item
                 name="tenCongViec"
                 label="Tên công việc"
-                rules={[{ required: true, message: "Please enter user name" }]}
+                rules={[{ required: true, message: "Nhập tên công việc" }]}
               >
                 <Input
                   placeholder="Nhập tên công việc"
-                  defaultValue={congViec.tenCongViec}
+                  defaultValue={congViec?.tenCongViec}
                 />
               </Form.Item>
             </Col>
@@ -110,15 +174,30 @@ export default function btnEditCongViec(props: Props) {
               <Form.Item
                 name="hinhAnh"
                 label="Hình ảnh"
-                rules={[{ required: true, message: "Please enter url" }]}
               >
-                <Input
-                  defaultValue={congViec.hinhAnh}
-                  style={{ width: "100%" }}
-                  addonBefore="https://"
-                  addonAfter=""
-                  placeholder="link url"
-                />
+                <input type="file" onChange={(e) => convertFile(e)} />
+                  <hr />
+                  {filebase64 &&
+                    <>
+
+                      {(filebase64.indexOf("image/") > -1) &&
+                        <img src={filebase64} width={300} />
+                      }
+                      {(filebase64.indexOf("video/") > -1) &&
+                        <video controls >
+                          <source src={filebase64} />
+                        </video>
+                      }
+                      {(filebase64.indexOf("audio/") > -1) &&
+                        <audio controls >
+                          <source src={filebase64} />
+                        </audio>
+                      }
+                      {(filebase64.indexOf("application/pdf") > -1) &&
+                        <embed src={filebase64} width="800px" height="2100px" />
+                      }
+                    </>
+                  }
               </Form.Item>
             </Col>
           </Row>
@@ -126,7 +205,7 @@ export default function btnEditCongViec(props: Props) {
             <Col span={12}>
               <Form.Item name="danhGia" label="Đánh giá">
                 <InputNumber
-                  defaultValue={congViec.danhGia}
+                  defaultValue={!congViec ? "0" : congViec?.danhGia}
                   addonAfter={<LikeOutlined />}
                   style={{ width: "100%" }}
                 />
@@ -139,7 +218,7 @@ export default function btnEditCongViec(props: Props) {
                 rules={[{ required: true, message: "Nhập giá tền" }]}
               >
                 <InputNumber
-                  defaultValue={congViec.giaTien}
+                  defaultValue={congViec?.giaTien}
                   addonAfter={<DollarOutlined />}
                   style={{ width: "100%" }}
                 />
@@ -151,11 +230,11 @@ export default function btnEditCongViec(props: Props) {
               <Form.Item
                 name="nguoiTao"
                 label="Mã người tạo"
-                rules={[{ required: true, message: "Nhập tên công việc" }]}
+                rules={[{ required: true, message: "Nhập mã người tạo" }]}
               >
                 <Input
-                  defaultValue={congViec.nguoiTao}
-                  placeholder="Nhập tên công việc"
+                  defaultValue={!congViec ? currentUSer.user.id : congViec?.nguoiTao}
+                  placeholder="Nhập mã người tạo"
                 />
               </Form.Item>
             </Col>
@@ -168,7 +247,7 @@ export default function btnEditCongViec(props: Props) {
                 ]}
               >
                 <Input
-                  defaultValue={congViec.maChiTietLoaiCongViec}
+                  defaultValue={congViec?.maChiTietLoaiCongViec}
                   placeholder="Nhập mã chi tiết công việc"
                 />
               </Form.Item>
@@ -178,7 +257,7 @@ export default function btnEditCongViec(props: Props) {
             <Col span={24}>
               <Form.Item name="moTaNgan" label="Mô tả ngắn">
                 <Input.TextArea
-                  defaultValue={congViec.moTaNgan}
+                  defaultValue={congViec?.moTaNgan}
                   rows={4}
                   placeholder=""
                 />
@@ -189,7 +268,7 @@ export default function btnEditCongViec(props: Props) {
             <Col span={24}>
               <Form.Item name="moTa" label="Mô tả">
                 <Input.TextArea
-                  defaultValue={congViec.moTa}
+                  defaultValue={congViec?.moTa}
                   rows={6}
                   placeholder=""
                 />
@@ -204,7 +283,7 @@ export default function btnEditCongViec(props: Props) {
                 rules={[{ required: true, message: "Nhập sao công việc" }]}
               >
                 <InputNumber
-                  defaultValue={congViec.saoCongViec}
+                  defaultValue={congViec?.saoCongViec}
                   addonAfter={<StarOutlined />}
                   style={{ width: "100%" }}
                 />

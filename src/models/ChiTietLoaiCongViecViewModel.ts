@@ -7,3 +7,9 @@ export interface ChiTietLoaiCongViecViewModel {
   maLoaiCongViec?: number;
   dsChiTietLoai?: ChiTietLoaiView[];
 }
+
+export interface NhomChiTietLoai {
+  tenChiTiet?: string;
+  maLoaiCongViec?: number;
+  danhSachChiTiet?: ChiTietLoaiView[];
+}

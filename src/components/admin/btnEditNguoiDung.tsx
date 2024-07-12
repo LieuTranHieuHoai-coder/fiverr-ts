@@ -13,7 +13,7 @@ import {
   Space,
 } from "antd";
 import { CapNhatNguoiDung } from "../../models/CapNhatNguoiDung";
-import { getUsers, putUsers } from "../../apis/apiNguoiDung";
+import { getUsers, putUsers, postUsers } from "../../apis/apiNguoiDung";
 import { useNguoiDungStore } from "../../store/userStore";
 import Swal from "sweetalert2";
 import { ThongTinNguoiDung } from "../../models/ThongTinNguoiDung";
@@ -22,12 +22,12 @@ import dayjs from "dayjs";
 const { Option } = Select;
 
 type Props = {
-  nguoiDung: ThongTinNguoiDung;
+  nguoiDung?: ThongTinNguoiDung;
 };
 export default function EditNguoiDung(props: Props) {
   const { nguoiDung } = props;
   const [open, setOpen] = useState(false);
-  const { addRanges } = useNguoiDungStore();
+  const { addRanges, add } = useNguoiDungStore();
   const showDrawer = () => {
     setOpen(true);
   };
@@ -38,39 +38,56 @@ export default function EditNguoiDung(props: Props) {
 
   const formRef = React.useRef<FormInstance<ThongTinNguoiDung>>(null);
 
-  const getFormValues = () => {
-    const values = formRef.current?.getFieldsValue();
-    putUsers(Number(nguoiDung.id), values)
-      .then(() => {
-        getUsers().then((res) => {
-          addRanges(res);
-        });
+  const getFormValues = async () => {
+    try {
+      const values = await formRef.current?.validateFields();
+      if (!nguoiDung) {
+        await postUsers(values);
+        const res = await getUsers();
+        addRanges(res);
         Swal.fire({
           position: "center",
           icon: "success",
-          title: "Your work has been saved",
+          title: "Hoàn tất",
           showConfirmButton: false,
           timer: 1000,
         });
-      })
-      .catch((err) => {
+      } else {
+        await putUsers(Number(nguoiDung?.id), values);
+        const res = await getUsers();
+        addRanges(res);
         Swal.fire({
           position: "center",
-          icon: "error",
-          title: "Error",
-          text: err.message,
+          icon: "success",
+          title: "Hoàn tất",
+          showConfirmButton: false,
+          timer: 1000,
         });
+      }
+      setOpen(false);
+    } catch (err:any) {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Error",
+        text: err.message,
       });
-    setOpen(false);
-  }
+    }
+  };
 
   return (
     <>
-      <Button type="primary" onClick={showDrawer} icon={<EditOutlined />}>
-        Chỉnh sửa
-      </Button>
+      {!nguoiDung ? (
+        <Button size="large" type="primary" onClick={showDrawer} icon={<PlusOutlined />}>
+          Thêm
+        </Button>
+      ) : (
+        <Button type="primary" onClick={showDrawer} icon={<EditOutlined />}>
+          Chỉnh sửa
+        </Button>
+      )}
       <Drawer
-        title="Chỉnh sửa người dùng"
+        title={!nguoiDung ? "Thêm người dùng" : "Chỉnh sửa người dùng"}
         width={720}
         onClose={onClose}
         open={open}
@@ -98,25 +115,34 @@ export default function EditNguoiDung(props: Props) {
               >
                 <Input
                   placeholder="Nhập tên người dùng"
-                  defaultValue={nguoiDung.name}
+                  defaultValue={nguoiDung?.name}
                 />
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item name="email" label="Email" rules={[{ type: "email" }]}>
+              <Form.Item
+                name="email"
+                label="Email"
+                rules={[
+                  { type: "email", message: "Email không hợp lệ" },
+                ]}
+              >
                 <Input
                   placeholder="example@gmail.com"
-                  defaultValue={nguoiDung.email}
+                  defaultValue={nguoiDung?.email}
                 />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item name="birthday" label="Ngày sinh">
+              <Form.Item
+                name="birthday"
+                label="Ngày sinh"
+              >
                 <Input
                   placeholder="2024/01/01"
-                  defaultValue={nguoiDung.birthday}
+                  defaultValue={nguoiDung?.birthday}
                 />
               </Form.Item>
             </Col>
@@ -124,9 +150,8 @@ export default function EditNguoiDung(props: Props) {
               <Form.Item
                 name="role"
                 label="Phân quyền"
-                rules={[{ required: true, message: "Chọn phân quyền" }]}
               >
-                <Select placeholder="Phân quyền" defaultValue={nguoiDung.role}>
+                <Select placeholder="Phân quyền" defaultValue={!nguoiDung ? "USER" : nguoiDung?.role}>
                   <Option value="USER">USER</Option>
                   <Option value="ADMIN">ADMIN</Option>
                 </Select>
@@ -138,12 +163,35 @@ export default function EditNguoiDung(props: Props) {
               <Form.Item
                 name="gender"
                 label="Giới tính"
-                rules={[{ required: true, message: "Chọn giới tính" }]}
               >
-                <Select placeholder="Giới tính" defaultValue={nguoiDung.gender}>
-                  <Option value={true} >Nam</Option>
+                <Select placeholder="Giới tính" defaultValue={!nguoiDung ? true : nguoiDung?.gender}>
+                  <Option value={true}>Nam</Option>
                   <Option value={false}>Nữ</Option>
                 </Select>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="phone"
+                label="SĐT"
+              >
+                <Input
+                  placeholder="+84"
+                  defaultValue={nguoiDung?.phone}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+            <Form.Item
+                name="password"
+                label="Mật khẩu"
+              >
+                <Input
+                  placeholder=""
+                  defaultValue={nguoiDung?.password}
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -153,7 +201,7 @@ export default function EditNguoiDung(props: Props) {
                 <Input.TextArea
                   rows={4}
                   placeholder="skill"
-                  defaultValue={nguoiDung.skill}
+                  defaultValue={nguoiDung?.skill}
                 />
               </Form.Item>
             </Col>
@@ -164,7 +212,7 @@ export default function EditNguoiDung(props: Props) {
                 <Input.TextArea
                   rows={4}
                   placeholder="certification"
-                  defaultValue={nguoiDung.certification}
+                  defaultValue={nguoiDung?.certification}
                 />
               </Form.Item>
             </Col>

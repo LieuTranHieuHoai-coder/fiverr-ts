@@ -19,7 +19,7 @@ export const postThueCongViec = async (payload?: ThueCongViecViewModel) => {
     }
 }
 
-export const putThueCongViec = async (id: number, payload: ThueCongViecViewModel) => {
+export const putThueCongViec = async (id?: number, payload?: ThueCongViecViewModel) => {
     try {
         const response = await api.put("/thue-cong-viec/" + id, payload);
         return response.data.content;

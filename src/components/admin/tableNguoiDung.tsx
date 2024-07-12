@@ -24,6 +24,7 @@ export default function TableNguoiDung() {
   useEffect(() => {
     getUsers().then((res) => {
       addRanges(res);
+      setFilteredData(res)
     });
   }, []);
 
@@ -41,7 +42,7 @@ export default function TableNguoiDung() {
 
   // };
 
-  const handleEditClick = (id: number | undefined) => {};
+  const handleEditClick = (id: number | undefined) => { };
 
   const handleDeleteClick = (id: number) => {
     Swal.fire({
@@ -175,18 +176,39 @@ export default function TableNguoiDung() {
       ),
     },
   ];
+  const { Search } = Input;
+  const [filteredData, setFilteredData] = React.useState(lstUsers);
+  useEffect(() => {
+    setFilteredData(lstUsers);
+  }, [lstUsers]);
+  const [searchText, setSearchText] = React.useState('');
 
+  const handleSearch = (event: any) => {
+    const text = event.target.value;
+    setSearchText(text);
+    const filtered = lstUsers.filter((item) =>
+      item.name?.includes(searchText)
+    );
+    setFilteredData(filtered);
+  };
   return (
     <>
-      <div className="mb-5">
-        {/* <Space.Compact style={{ width: '100%' }}>
-          <Input placeholder='Add a new group' onChange={handleInputChange} value={inputValue}/>
-          <Button type="primary" onClick={handleButtonClick}>Submit</Button>
-        </Space.Compact> */}
+      <div className='mb-5 flex justify-between'>
+        <EditNguoiDung nguoiDung={undefined}></EditNguoiDung>
+        <Space style={{ marginBottom: 16 }}>
+          <Search
+            placeholder="Tìm kiếm"
+            allowClear
+            enterButton="Search"
+            size="large"
+            onChange={handleSearch}
+          />
+        </Space>
+
       </div>
       <Table
         columns={columns}
-        dataSource={lstUsers}
+        dataSource={filteredData}
         scroll={{ x: 1000, y: "100vh" }}
       />
     </>

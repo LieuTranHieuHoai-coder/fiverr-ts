@@ -10,7 +10,7 @@ export const getUsers = async () => {
     throw Error(error);
   }
 };
-export const postUsers = async (payload: ThongTinNguoiDung) => {
+export const postUsers = async (payload?: ThongTinNguoiDung) => {
   try {
     const response = await api.post("/users", payload);
     return response.data.content;

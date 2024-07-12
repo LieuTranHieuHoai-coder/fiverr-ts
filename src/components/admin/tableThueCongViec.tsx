@@ -7,6 +7,7 @@ import { getThueCongViec, deleteThueCongViec, putThueCongViec } from '../../apis
 import { useDanhSachThueStore } from '../../store/orderStore';
 import { CongViecThue } from '../../models/CongViecViewModel';
 import Swal from 'sweetalert2';
+import EditThueCongViec from './btnEditThueCongViec';
 
 
 export default function TableThueCongViec() {
@@ -114,17 +115,15 @@ export default function TableThueCongViec() {
       key: 'operation',
       fixed: 'right',
       width: 100,
-      render: (_, {id}) =>
+      render: (_, item) =>
         (
           <>
             <div className="flex">
               <div className="mr-2">
-                <Button type="primary" icon={<EditOutlined />} onClick={()=>handleEditClick(id)}>
-                  Edit
-                </Button>
+                <EditThueCongViec thueCongViec={item}></EditThueCongViec>
               </div>
               <div>
-                <Button type="primary" danger icon={<DeleteOutlined />} onClick={()=>handleDeleteClick(id)}>
+                <Button type="primary" danger icon={<DeleteOutlined />} onClick={()=>handleDeleteClick(item.id)}>
                   Delete
                 </Button>
               </div>

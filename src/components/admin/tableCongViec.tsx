@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Table } from 'antd';
+import { Button, Input, Space, Table } from 'antd';
 import type { TableColumnsType } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { usedanhSachCongViecStore } from '../../store/congviecStore';
 import { CongViecViewModel } from '../../models/CongViecViewModel';
 import dayjs from 'dayjs';
-import { deleteCongViec , getCongViec} from '../../apis/apiCongViec';
+import { deleteCongViec, getCongViec } from '../../apis/apiCongViec';
 import { PAGE_SIZE } from '../../constants/pagesize';
 import Swal from 'sweetalert2';
 import EditCongViec from './btnEditCongViec';
 
 
 export default function TableCongViec() {
-  const { danhSachCongViec, addRanges, add , remove} = usedanhSachCongViecStore();
-  const [currentPage, setCurrentPage] = useState(1);
-
+  const { danhSachCongViec, addRanges, add, remove } = usedanhSachCongViecStore();
+  const { Search } = Input;
   useEffect(() => {
     getCongViec().then((res) => {
       addRanges(res);
+      setFilteredData(res);
     });
   }, []);
 
@@ -34,38 +34,41 @@ export default function TableCongViec() {
     });
   };
 
-  const handleEditClick = (id: number | undefined) => {
-  };
-
   const handleDeleteClick = (id: number) => {
     Swal.fire({
-      title: "Would you want to delete?",
-      text: "You won't be able to revert this!",
+      title: "Bạn có chắc không?",
+      text: "Dữ liệu sẽ bị xóa vĩnh viễn!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Đồng ý!",
     }).then((result) => {
       if (result.isConfirmed) {
         deleteCongViec(id).then((res) => {
-          remove(id);
+          getCongViec().then((res) => {
+            addRanges(res);
+            setFilteredData(res);
+          });
+
           Swal.fire({
             position: "center",
             icon: "success",
-            title: "Your work has been saved",
+            title: "Hoàn tất",
             showConfirmButton: false,
             timer: 1000
           });
-          
+
           // getCongViec().then((res) => {
           //   addRanges(res);
           // });
         }).catch((err) => {
-          Swal.fire({title: "Something went wrong",
+          Swal.fire({
+            title: "Something went wrong",
             text: err.message,
-            icon: "error",});
-        });  
+            icon: "error",
+          });
+        });
       }
     });
   };
@@ -141,31 +144,65 @@ export default function TableCongViec() {
       fixed: 'right',
       width: 100,
       render: (_, item) =>
-        (
-          <>
-            <div className="flex">
-              <div className="mr-2">
-                <EditCongViec congViec={item}></EditCongViec>
-              </div>
-              <div>
-                <Button type="primary" danger icon={<DeleteOutlined />} onClick={()=>handleDeleteClick(Number(item.id))}>
-                  Delete
-                </Button>
-              </div>
+      (
+        <>
+          <div className="flex">
+            <div className="mr-2">
+              <EditCongViec congViec={item}></EditCongViec>
             </div>
-          </>
-        ),
+            <div>
+              <Button type="primary" danger icon={<DeleteOutlined />} onClick={() => handleDeleteClick(Number(item.id))}>
+                Delete
+              </Button>
+            </div>
+          </div>
+        </>
+      ),
     },
   ];
 
+
+  const [filteredData, setFilteredData] = React.useState(danhSachCongViec);
+  useEffect(() => {
+    setFilteredData(danhSachCongViec);
+  }, [danhSachCongViec]);
+  const [searchText, setSearchText] = React.useState('');
+  const handleSearchChange = () => {
+
+    const filtered = danhSachCongViec.filter((item) =>
+      Object.values(item).some((value) =>
+        value.toString().toLowerCase().includes(searchText.toLowerCase())
+      )
+    );
+    setFilteredData(filtered);
+  };
+  const handleSearch = (event: any) => {
+    const text = event.target.value;
+    setSearchText(text);
+    const filtered = danhSachCongViec.filter((item) =>
+      Object.values(item).some((value) =>
+        value.toString().toLowerCase().includes(text.toLowerCase())
+      )
+    );
+    setFilteredData(filtered);
+  };
+  
   return (
     <>
-      <div className='mb-5'>
-        {/* <Space.Compact style={{ width: '100%' }}>
-          <Input placeholder='Thêm công việc' onChange={handleInputChange} value={inputValue}/>
-          <Button type="primary" onClick={handleButtonClick}>Submit</Button>
-        </Space.Compact> */}
+      <div className='mb-5 flex justify-between'>
+        <EditCongViec congViec={undefined}></EditCongViec>
+        <Space style={{ marginBottom: 16 }}>
+          <Search
+            placeholder="Tìm kiếm"
+            allowClear
+            enterButton="Search"
+            size="large"
+            onChange={handleSearch}
+            onSearch={handleSearchChange}
+          />
+        </Space>
+
       </div>
-      <Table columns={columns} dataSource={danhSachCongViec} scroll={{ x: 1000, y: "100vh" }} />
+      <Table columns={columns} dataSource={filteredData} scroll={{ x: 1000, y: "100vh" }} />
     </>)
 }

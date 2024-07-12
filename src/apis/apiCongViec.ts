@@ -9,7 +9,7 @@ export const getCongViec = async () => {
         throw Error(error);
     }
 };
- export const postCongViec = async (payload: CongViecViewModel) => {
+ export const postCongViec = async (payload?: CongViecViewModel) => {
     try {
         const response = await api.post("/cong-viec", payload);
         return response.data.content; // congviecviewmodel
@@ -54,9 +54,9 @@ export const getCongViec = async () => {
     }
  };
 
- export const uploadHinhCongViec = async (MaCongViec:any, payload:File) => {
+ export const uploadHinhCongViec = async (MaCongViec:any, payload:any) => {
     try {
-        const response = await api.post(`cong-viec/upload-hinh-cong-viec/${MaCongViec}`, payload);
+        const response = await api.post(`/cong-viec/upload-hinh-cong-viec/${MaCongViec}`, payload);
         return response.data.content; // congviecviewmodel
     } catch (error:any) {
         throw Error(error);
