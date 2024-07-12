@@ -10,6 +10,7 @@ import {
   Form,
   FormInstance,
   Input,
+  InputNumber,
   Row,
   Select,
   Space,
@@ -111,7 +112,7 @@ export default function EditThueCongViec(props: Props) {
           </Space>
         }
       >
-        <Form layout="vertical" ref={formRef} initialValues={props}>
+        <Form layout="vertical" ref={formRef}>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
@@ -129,7 +130,6 @@ export default function EditThueCongViec(props: Props) {
               <Form.Item
                 name="maNguoiThue"
                 label="Mã người thuê"
-                rules={[{ required: true, message: "Mã người thuê" }]}
               >
                 <Input
                   placeholder="Nhập mã người thuê"
@@ -143,7 +143,6 @@ export default function EditThueCongViec(props: Props) {
               <Form.Item
                 name="ngayThue"
                 label="Ngày thuê"
-                rules={[{ required: true, message: "Ngày thuê" }]}
               >
                 <Input
                   placeholder="Ngày thuê"

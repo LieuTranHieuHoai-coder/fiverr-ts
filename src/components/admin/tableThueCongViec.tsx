@@ -17,7 +17,7 @@ export default function TableThueCongViec() {
       addRanges(res);
     });
   }, []);
-
+  console.log(danhSachThue);
   const handleDeleteClick = (id: number) => {
     Swal.fire({
       title: "Bạn có chắc không",
@@ -138,7 +138,8 @@ export default function TableThueCongViec() {
   return (
     <>
       <div className='mb-5 flex justify-between'>
-        <EditThueCongViec thueCongViec={undefined}></EditThueCongViec>
+        {/* <EditThueCongViec thueCongViec={undefined}></EditThueCongViec> */}
+        <div></div>
         <Space style={{ marginBottom: 16 }}>
           <Search
             placeholder="Tìm kiếm"
