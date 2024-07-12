@@ -36,13 +36,13 @@ export default function TableThueCongViec() {
 
   const handleDeleteClick = (id: number) => {
     Swal.fire({
-      title: "Would you want to delete?",
-      text: "You won't be able to revert this!",
+      title: "Bạn có chắc không",
+      text: "Dữ liệu sẽ bị xóa vĩnh viễn!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Đồng ý!",
     }).then((result) => {
       if (result.isConfirmed) {
         remove(id);
@@ -50,7 +50,7 @@ export default function TableThueCongViec() {
           Swal.fire({
             position: "center",
             icon: "success",
-            title: "Your work has been saved",
+            title: "Hoàn tất",
             showConfirmButton: false,
             timer: 1000
           });

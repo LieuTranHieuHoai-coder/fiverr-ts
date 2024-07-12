@@ -1,6 +1,12 @@
 import { ThueCongViecViewModel } from "../models/ThueCongViecModel";
 import api from "./apiUtil";
 
+type AddThue = {
+    maCongViec: number,
+    maNguoiThue: number,
+    ngayThue: string,
+    hoanThanh: boolean
+}
 export const getThueCongViec = async () => {
     try {
         const response = await api.get("/thue-cong-viec");
@@ -12,7 +18,7 @@ export const getThueCongViec = async () => {
 
 export const postThueCongViec = async (payload?: ThueCongViecViewModel) => {
     try {
-        const response = await api.post("/thue-cong-viec", payload,);
+        const response = await api.post("/thue-cong-viec", payload);
         return response.data.content;
     } catch (error: any) {
         throw Error(error);
@@ -55,7 +61,7 @@ export const getThueCongViecPhanTrang = async (pageIndex: number, pageSize: numb
     }
 }
 
-export const getDanhSachDaThue = async() => {
+export const getDanhSachDaThue = async () => {
     try {
         const response = await api.get("/thue-cong-viec/lay-danh-sach-da-thue");
         return response.data.content;

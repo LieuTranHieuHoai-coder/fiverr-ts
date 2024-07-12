@@ -9,8 +9,6 @@ import {
 import {
   Button,
   Col,
-  ConfigProvider,
-  DatePicker,
   Drawer,
   Form,
   FormInstance,
@@ -53,11 +51,6 @@ export default function EditCongViec(props: Props) {
       }
     }
   }
-  // function formSubmit(e: any) {
-  //   e.preventDefault();
-  //   console.log({ filebase64 })
-  //   alert("here you'd submit the form using\n the filebase64 like any other field")
-  // }
   const onClose = () => {
     setOpen(false);
   };

@@ -1,16 +1,11 @@
 import React, { useState } from "react";
 import {
-  DollarOutlined,
   EditOutlined,
-  LikeOutlined,
   PlusOutlined,
-  StarOutlined,
 } from "@ant-design/icons";
 import {
   Button,
   Col,
-  ConfigProvider,
-  DatePicker,
   Drawer,
   Form,
   FormInstance,
@@ -20,20 +15,19 @@ import {
   Select,
   Space,
 } from "antd";
-import { CongViecViewModel } from "../../models/CongViecViewModel";
-import { putCongViec, getCongViec } from "../../apis/apiCongViec";
 import Swal from "sweetalert2";
-import { usedanhSachCongViecStore } from "../../store/congviecStore";
 import { useDanhSachThueStore } from "../../store/orderStore";
 import { ThueCongViecViewModel } from "../../models/ThueCongViecModel";
-import { getThueCongViec, putThueCongViec } from "../../apis/apiThueCongViec";
+import { getThueCongViec, putThueCongViec, postThueCongViec } from "../../apis/apiThueCongViec";
+import dayjs from "dayjs";
 
 const { Option } = Select;
-
 type Props = {
   thueCongViec?: ThueCongViecViewModel;
 };
 export default function EditThueCongViec(props: Props) {
+  const userLocal = localStorage.getItem("user");
+  const currentUSer = userLocal ? JSON.parse(userLocal) : null;
   const [open, setOpen] = useState(false);
   const { addRanges } = useDanhSachThueStore();
   const showDrawer = () => {
@@ -43,11 +37,26 @@ export default function EditThueCongViec(props: Props) {
   const onClose = () => {
     setOpen(false);
   };
+
   const { thueCongViec } = props;
   const formRef = React.useRef<FormInstance<ThueCongViecViewModel>>(null);
   const getFormValues = () => {
     const values = formRef.current?.getFieldsValue();
-    putThueCongViec(thueCongViec?.id, values)
+    if (!thueCongViec) {
+      postThueCongViec(values).then(() => {
+        getThueCongViec().then((res) => {
+          addRanges(res);
+        });
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Hoàn tất",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+      });
+    } else {
+      putThueCongViec(thueCongViec?.id, values)
       .then(() => {
         getThueCongViec().then((res) => {
           addRanges(res);
@@ -55,7 +64,7 @@ export default function EditThueCongViec(props: Props) {
         Swal.fire({
           position: "center",
           icon: "success",
-          title: "Your work has been saved",
+          title: "Hoàn tất",
           showConfirmButton: false,
           timer: 1000,
         });
@@ -68,16 +77,24 @@ export default function EditThueCongViec(props: Props) {
           text: err.message,
         });
       });
+    }
+    
     setOpen(false);
   };
 
   return (
     <>
-      <Button type="primary" onClick={showDrawer} icon={<EditOutlined />}>
-        Chỉnh sửa
-      </Button>
+      {
+        !thueCongViec
+          ? (<><Button size="large" type="primary" onClick={showDrawer} icon={<PlusOutlined />}>
+            Thêm
+          </Button></>)
+          : (<Button type="primary" onClick={showDrawer} icon={<EditOutlined />}>
+            Chỉnh sửa
+          </Button>)
+      }
       <Drawer
-        title="Chỉnh sửa thuê công việc"
+        title={!thueCongViec ? "Thêm công việc thuê" : "Chỉnh sửa thuê công việc" }
         width={720}
         onClose={onClose}
         open={open}
@@ -95,7 +112,7 @@ export default function EditThueCongViec(props: Props) {
           </Space>
         }
       >
-        <Form layout="vertical" ref={formRef} initialValues={thueCongViec}>
+        <Form layout="vertical" ref={formRef} initialValues={props}>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
@@ -117,7 +134,7 @@ export default function EditThueCongViec(props: Props) {
               >
                 <Input
                   placeholder="Nhập mã người thuê"
-                  defaultValue={thueCongViec?.maNguoiThue}
+                  defaultValue={!thueCongViec ? currentUSer.user.id : thueCongViec?.maNguoiThue}
                 />
               </Form.Item>
             </Col>
@@ -131,7 +148,7 @@ export default function EditThueCongViec(props: Props) {
               >
                 <Input
                   placeholder="Ngày thuê"
-                  defaultValue={thueCongViec?.ngayThue}
+                  defaultValue={!thueCongViec ? dayjs().format("YYYY-MM-DD").toString() : thueCongViec?.ngayThue}
                 />
               </Form.Item>
             </Col>
@@ -139,9 +156,8 @@ export default function EditThueCongViec(props: Props) {
               <Form.Item
                 name="hoanThanh"
                 label="Trạng thái"
-                
               >
-                <Select defaultValue={thueCongViec?.hoanThanh}>
+                <Select defaultValue={!thueCongViec ? false : thueCongViec?.hoanThanh}>
                   <Option value={true}>Hoàn thành</Option>
                   <Option value={false}>Chưa hoàn thành</Option>
                 </Select>

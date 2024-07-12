@@ -47,7 +47,7 @@ export default function EditBinhLuan(props: Props) {
         Swal.fire({
           position: "center",
           icon: "success",
-          title: "Your work has been saved",
+          title: "Hoàn tất",
           showConfirmButton: false,
           timer: 1000,
         });
