@@ -142,6 +142,7 @@ export default function TableBinhLuan() {
     <>
       <div className='mb-5 flex justify-between'>
         {/* <EditCongViec congViec={undefined}></EditCongViec> */}
+        <div></div>
         <Space style={{ marginBottom: 16 }}>
           <Search
             placeholder="Tìm kiếm"

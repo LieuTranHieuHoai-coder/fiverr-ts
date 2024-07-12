@@ -31,7 +31,7 @@ import { getThueCongViec, putThueCongViec } from "../../apis/apiThueCongViec";
 const { Option } = Select;
 
 type Props = {
-  thueCongViec: ThueCongViecViewModel;
+  thueCongViec?: ThueCongViecViewModel;
 };
 export default function EditThueCongViec(props: Props) {
   const [open, setOpen] = useState(false);
@@ -47,7 +47,7 @@ export default function EditThueCongViec(props: Props) {
   const formRef = React.useRef<FormInstance<ThueCongViecViewModel>>(null);
   const getFormValues = () => {
     const values = formRef.current?.getFieldsValue();
-    putThueCongViec(thueCongViec.id, values)
+    putThueCongViec(thueCongViec?.id, values)
       .then(() => {
         getThueCongViec().then((res) => {
           addRanges(res);
@@ -105,7 +105,7 @@ export default function EditThueCongViec(props: Props) {
               >
                 <Input
                   placeholder="Nhập mã công việc"
-                  defaultValue={thueCongViec.maCongViec}
+                  defaultValue={thueCongViec?.maCongViec}
                 />
               </Form.Item>
             </Col>
@@ -117,7 +117,7 @@ export default function EditThueCongViec(props: Props) {
               >
                 <Input
                   placeholder="Nhập mã người thuê"
-                  defaultValue={thueCongViec.maNguoiThue}
+                  defaultValue={thueCongViec?.maNguoiThue}
                 />
               </Form.Item>
             </Col>
@@ -131,7 +131,7 @@ export default function EditThueCongViec(props: Props) {
               >
                 <Input
                   placeholder="Ngày thuê"
-                  defaultValue={thueCongViec.ngayThue}
+                  defaultValue={thueCongViec?.ngayThue}
                 />
               </Form.Item>
             </Col>
@@ -141,7 +141,7 @@ export default function EditThueCongViec(props: Props) {
                 label="Trạng thái"
                 
               >
-                <Select defaultValue={thueCongViec.hoanThanh}>
+                <Select defaultValue={thueCongViec?.hoanThanh}>
                   <Option value={true}>Hoàn thành</Option>
                   <Option value={false}>Chưa hoàn thành</Option>
                 </Select>

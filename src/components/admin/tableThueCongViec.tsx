@@ -133,14 +133,39 @@ export default function TableThueCongViec() {
     },
   ];
 
+
+  const { Search } = Input;
+  const [filteredData, setFilteredData] = React.useState(danhSachThue);
+  useEffect(() => {
+    setFilteredData(danhSachThue);
+  }, [danhSachThue]);
+  const [searchText, setSearchText] = React.useState('');
+
+  const handleSearch = (event: any) => {
+    const text = event.target.value;
+    setSearchText(text);
+    const filtered = danhSachThue.filter((item) =>
+      Object.values(item).some((value) =>
+        value.toString().toLowerCase().includes(text.toLowerCase())
+      )
+    );
+    setFilteredData(filtered);
+  };
   return (
     <>
-      <div className='mb-5'>
-        {/* <Space.Compact style={{ width: '100%' }}>
-          <Input placeholder='Add a new group' onChange={handleInputChange} value={inputValue}/>
-          <Button type="primary" onClick={handleButtonClick}>Submit</Button>
-        </Space.Compact> */}
+      <div className='mb-5 flex justify-between'>
+        <EditThueCongViec></EditThueCongViec>
+        <Space style={{ marginBottom: 16 }}>
+          <Search
+            placeholder="Tìm kiếm"
+            allowClear
+            enterButton="Search"
+            size="large"
+            onChange={handleSearch}
+          />
+        </Space>
+
       </div>
-      <Table columns={columns} dataSource={danhSachThue} scroll={{ x: 1000, y: "100vh" }} />
+      <Table columns={columns} dataSource={filteredData} scroll={{ x: 1000, y: "100vh" }} />
     </>)
 }

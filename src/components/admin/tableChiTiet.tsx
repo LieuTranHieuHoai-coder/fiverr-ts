@@ -27,7 +27,6 @@ export default function TableChiTiet() {
   useEffect(() => {
     getChiTietLoaiCongViec().then((res) => {
       addRanges(res);
-      setFilteredData(res);
     });
 
     getLoaiCogViec().then((res) => {
@@ -336,10 +335,11 @@ export default function TableChiTiet() {
       });
     }
   };
+
   const [filteredData, setFilteredData] = React.useState(danhSachChiTiet);
   useEffect(() => {
     setFilteredData(danhSachChiTiet);
-  }, [danhSachChiTiet, getFormValues]);
+  }, [danhSachChiTiet]);
 
   const [searchText, setSearchText] = React.useState('');
 

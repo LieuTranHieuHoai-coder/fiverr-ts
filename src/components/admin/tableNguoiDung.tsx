@@ -1,17 +1,12 @@
-import React, { MouseEventHandler, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, Button, Input, Space, Table } from "antd";
 import type { TableColumnsType } from "antd";
 import {
   DeleteOutlined,
-  EditOutlined,
-  PlusSquareOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import dayjs from "dayjs";
-import { PAGE_SIZE } from "../../constants/pagesize";
 import { useNguoiDungStore } from "../../store/userStore";
 import {
-  getUserPhanTrang,
   getUsers,
   deleteUsers,
 } from "../../apis/apiNguoiDung";
