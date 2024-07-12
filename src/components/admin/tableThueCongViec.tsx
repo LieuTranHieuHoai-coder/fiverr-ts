@@ -18,22 +18,6 @@ export default function TableThueCongViec() {
     });
   }, []);
 
-  const [inputValue, setInputValue] = useState<string>('');
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-  };
-
-  // const handleButtonClick = () => {
-  //   add({
-  //     id: dayjs().millisecond() + danhSachLoaiCongViec.length ,
-  //     tenLoaiCongViec: inputValue,
-  //   });
-
-  // };
-  const handleEditClick = (id: number | undefined) => {
-  };
-
   const handleDeleteClick = (id: number) => {
     Swal.fire({
       title: "Bạn có chắc không",
@@ -154,7 +138,7 @@ export default function TableThueCongViec() {
   return (
     <>
       <div className='mb-5 flex justify-between'>
-        <EditThueCongViec></EditThueCongViec>
+        <EditThueCongViec thueCongViec={undefined}></EditThueCongViec>
         <Space style={{ marginBottom: 16 }}>
           <Search
             placeholder="Tìm kiếm"
