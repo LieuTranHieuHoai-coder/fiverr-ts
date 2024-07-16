@@ -82,13 +82,10 @@ function Navbar() {
                 <span className="text-lg text-danger">{currentUser?.name}</span>
                 {open && (
                   <div className="options">
-                    {currentUser?.role === "admin" && (
+                    {currentUser?.role === "ADMIN" && (
                       <>
-                        <Link className="link" to="/admin-category">
-                          Group Category
-                        </Link>
-                        <Link className="link" to="/add">
-                          Add New Gig
+                        <Link className="link" to="/admin/loai-cong-viec">
+                          Dashboard
                         </Link>
                       </>
                     )}

@@ -6,6 +6,7 @@ export interface ChiTietLoaiCongViecViewModel {
   hinhAnh?: string;
   maLoaiCongViec?: number;
   dsChiTietLoai?: ChiTietLoaiView[];
+  maLoaiCongviec?: number;
 }
 
 export interface NhomChiTietLoai {

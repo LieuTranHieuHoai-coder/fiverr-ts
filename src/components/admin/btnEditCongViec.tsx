@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   DollarOutlined,
   EditOutlined,
@@ -22,6 +22,7 @@ import { CongViecViewModel } from "../../models/CongViecViewModel";
 import { putCongViec, getCongViec, postCongViec, uploadHinhCongViec } from "../../apis/apiCongViec";
 import Swal from "sweetalert2";
 import { usedanhSachCongViecStore } from "../../store/congviecStore";
+import { getUsersById } from "../../apis/apiNguoiDung";
 
 const { Option } = Select;
 
@@ -33,11 +34,23 @@ export default function EditCongViec(props: Props) {
   const currentUSer = userLocal ? JSON.parse(userLocal) : null;
   const [open, setOpen] = useState(false);
   const { addRanges } = usedanhSachCongViecStore();
-  const showDrawer = () => {
+  const showDrawer = (id?: number) => {
+    if(id){
+      getUsersById(id).then((res) => {
+        setTen(res.name);
+        console.log(res);
+      });
+    }
+    else{
+      getUsersById(currentUSer.user.id).then((res)=>{
+        setTen(res.name);
+      }).catch((err) => {console.log(err);});
+    }
     setOpen(true);
   };
   const [filebase64, setFileBase64] = useState<string>("");
   const [image,setImage] = useState<File>();
+  const [tenNguoiTao, setTen] = useState<string>("");
   function convertFile(event: React.ChangeEvent<HTMLInputElement>) {
     if (event.target.files) {
       const fileRef = event.target.files[0] || ""
@@ -122,10 +135,10 @@ export default function EditCongViec(props: Props) {
     <>
       {
         !congViec
-          ? (<><Button size="large" type="primary" onClick={showDrawer} icon={<PlusOutlined />}>
+          ? (<><Button size="large" type="primary" onClick={()=>showDrawer()} icon={<PlusOutlined />}>
             Thêm
           </Button></>)
-          : (<Button type="primary" onClick={showDrawer} icon={<EditOutlined />}>
+          : (<Button type="primary" onClick={()=>showDrawer(congViec.nguoiTao)} icon={<EditOutlined />}>
             Chỉnh sửa
           </Button>)
       }
@@ -222,11 +235,11 @@ export default function EditCongViec(props: Props) {
             <Col span={12}>
               <Form.Item
                 name="nguoiTao"
-                label="Mã người tạo"
-                rules={[{ required: true, message: "Nhập mã người tạo" }]}
+                label={`Mã người tạo: ${tenNguoiTao}`}
               >
                 <Input
-                  defaultValue={!congViec ? currentUSer.user.id : congViec?.nguoiTao}
+                  disabled
+                  defaultValue={!congViec? currentUSer.user.id : congViec.nguoiTao}
                   placeholder="Nhập mã người tạo"
                 />
               </Form.Item>

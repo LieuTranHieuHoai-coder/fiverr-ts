@@ -1,5 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, ConfigProvider, Drawer, Form, Input, Modal, Row, Select, Space, Table } from "antd";
+import {
+  Button,
+  Col,
+  ConfigProvider,
+  Drawer,
+  Form,
+  Input,
+  Modal,
+  Row,
+  Select,
+  Space,
+  Table,
+} from "antd";
 import type { FormInstance, SelectProps, TableColumnsType } from "antd";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { usedanhSachChiTietStore } from "../../store/chitietcongviecStore";
@@ -10,9 +22,12 @@ import {
   getChiTietLoaiCongViecId,
   putSuaNhomChiTietLoai,
   postChiTietLoaiCongViec,
-  addNhomLoaiCongViec
+  addNhomLoaiCongViec,
 } from "../../apis/apiChiTietLoaiCongViec";
-import { ChiTietLoaiCongViecViewModel, NhomChiTietLoai } from "../../models/ChiTietLoaiCongViecViewModel";
+import {
+  ChiTietLoaiCongViecViewModel,
+  NhomChiTietLoai,
+} from "../../models/ChiTietLoaiCongViecViewModel";
 import Swal from "sweetalert2";
 import { useDanhSachLoaiCongViecStore } from "../../store/groupCategoryStore";
 import { getLoaiCogViec } from "../../apis/apiLoaiCongViec";
@@ -20,9 +35,9 @@ import { getLoaiCogViec } from "../../apis/apiLoaiCongViec";
 const { Option } = Select;
 
 export default function TableChiTiet() {
-  const { danhSachLoaiCongViec, addRanges: addRangesLoaiCongViec } = useDanhSachLoaiCongViecStore();
-  const { danhSachChiTiet, addRanges, update } =
-    usedanhSachChiTietStore();
+  const { danhSachLoaiCongViec, addRanges: addRangesLoaiCongViec } =
+    useDanhSachLoaiCongViecStore();
+  const { danhSachChiTiet, addRanges, update } = usedanhSachChiTietStore();
   const { Search } = Input;
   useEffect(() => {
     getChiTietLoaiCongViec().then((res) => {
@@ -32,7 +47,6 @@ export default function TableChiTiet() {
     getLoaiCogViec().then((res) => {
       addRangesLoaiCongViec(res);
     });
-
   }, []);
 
   const [inputValue, setInputValue] = useState<string>();
@@ -71,11 +85,23 @@ export default function TableChiTiet() {
     setOpenMD(true);
   };
 
-  const handleOk = (item?: ChiTietLoaiCongViecViewModel) => {
-    if (item?.id) {
-      item.tenNhom = inputValueNhom;
-      putSuaNhomChiTietLoai(item.id, item)
+  const handleOk = (t: ChiTietLoaiCongViecViewModel) => {
+    const payload = {
+      tenChiTiet: inputValueNhom,
+      maLoaiCongViec: Number(t.maLoaiCongviec),
+      danhSachChiTiet: t.dsChiTietLoai
+    };
+    if (t.id) {
+      //item.tenNhom = inputValueNhom;
+      putSuaNhomChiTietLoai(t.id, {
+        tenChiTiet: inputValueNhom,
+        maLoaiCongViec: chitietById?.maLoaiCongviec,
+        danhSachChiTiet: chitietById?.dsChiTietLoai,
+      })
         .then((res) => {
+          getChiTietLoaiCongViec().then((res) => {
+            addRanges(res);
+          });
           Swal.fire({
             position: "center",
             icon: "success",
@@ -83,7 +109,6 @@ export default function TableChiTiet() {
             showConfirmButton: false,
             timer: 1000,
           });
-          update(res);
         })
         .catch((err) => {
           Swal.fire({
@@ -108,16 +133,15 @@ export default function TableChiTiet() {
           </p>
           <EditOutlined style={{ cursor: "pointer" }} onClick={showModal} />
           <Modal
-            title="Title"
+            title="Tên chi tiết loại"
             open={openMD}
-            onOk={() => handleOk(chitietById)}
+            onOk={() => chitietById && handleOk(chitietById)}
             confirmLoading={confirmLoading}
             onCancel={handleCancelMD}
           >
             <input
               placeholder={chitietById?.tenNhom}
               type="text"
-
               onChange={handleNhomOnChange}
               id="146be7d9-143d-43de-a117-4f55446ed317"
               className="m-5 w-11/12 block rounded-lg border dark:border-none dark:bg-neutral-600 py-[9px] px-3 pr-4 text-sm focus:border-blue-400 focus:ring-1 focus:ring-blue-400 focus:outline-none"
@@ -128,13 +152,13 @@ export default function TableChiTiet() {
         <img src={chitietById?.hinhAnh} alt="" width={200} className="my-5" />
 
         {chitietById?.dsChiTietLoai?.map((item) => {
-
           return (
             <div key={item.id} className="flex flex-wrap">
               <p className="font-bold">ID: {item.id}</p>
               <div className="mb-4 w-full">
                 <label htmlFor="146be7d9-143d-43de-a117-4f55446ed317" />
                 <div className="flex items-center">
+                  
                   <input
                     placeholder="Tên chi tiết"
                     type="text"
@@ -167,7 +191,6 @@ export default function TableChiTiet() {
 
   const handleEditClick = (item: ChiTietLoaiCongViecViewModel) => {
     if (item.id) {
-
       putChiTietLoaiCongViecId(item?.id, item)
         .then(() => {
           getChiTietLoaiCongViec().then((res) => {
@@ -214,8 +237,6 @@ export default function TableChiTiet() {
               showConfirmButton: false,
               timer: 1000,
             });
-
-
           })
           .catch((err) => {
             Swal.fire({
@@ -309,8 +330,7 @@ export default function TableChiTiet() {
       const values = await formRef.current?.validateFields();
       addNhomLoaiCongViec({
         tenChiTiet: values?.tenChiTiet,
-        maLoaiCongViec: values?.maLoaiCongViec
-
+        maLoaiCongViec: values?.maLoaiCongViec,
       });
 
       getChiTietLoaiCongViec().then((res) => {
@@ -341,7 +361,7 @@ export default function TableChiTiet() {
     setFilteredData(danhSachChiTiet);
   }, [danhSachChiTiet]);
 
-  const [searchText, setSearchText] = React.useState('');
+  const [searchText, setSearchText] = React.useState("");
 
   const handleSearch = (event: any) => {
     const text = event.target.value;
@@ -356,14 +376,12 @@ export default function TableChiTiet() {
 
   const formRef = React.useRef<FormInstance<NhomChiTietLoai>>(null);
 
-
-
   const handleChange = (value: string | string[]) => {
     console.log(`Selected: ${value}`);
   };
   return (
     <>
-      <div className='mb-5 flex justify-between'>
+      <div className="mb-5 flex justify-between">
         <Button
           type="primary"
           icon={<PlusOutlined />}
@@ -380,7 +398,6 @@ export default function TableChiTiet() {
             onChange={handleSearch}
           />
         </Space>
-
       </div>
       <Table
         columns={columns}
@@ -424,36 +441,31 @@ export default function TableChiTiet() {
           </Space>
         }
       >
-        <Form layout="vertical" ref={formRef} initialValues={{ maLoaiCongViec: 1 }}>
+        <Form
+          layout="vertical"
+          ref={formRef}
+          initialValues={{ maLoaiCongViec: 1 }}
+        >
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
                 name="tenChiTiet"
                 label="Tên chi tiết"
-                rules={[{ required: true, message: "Nhập tên chi tiết" }]}
               >
-                <Input
-                  placeholder="Nhập tên chi tiết"
-                />
+                <Input placeholder="Nhập tên chi tiết" />
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                name="maLoaiCongViec"
-                label="Mã loại công việc"
-              >
+              <Form.Item name="maLoaiCongViec" label="Mã loại công việc">
                 <Select placeholder="Loại công việc" defaultValue={1}>
-                  {
-                    danhSachLoaiCongViec?.map((item) => (
-                      <Option key={item.id} value={item.id}>
-                        {item.tenLoaiCongViec}
-                      </Option>
-                    ))
-                  }
+                  {danhSachLoaiCongViec?.map((item) => (
+                    <Option key={item.id} value={item.id}>
+                      {item.tenLoaiCongViec}
+                    </Option>
+                  ))}
                 </Select>
               </Form.Item>
             </Col>
-
           </Row>
         </Form>
       </Drawer>

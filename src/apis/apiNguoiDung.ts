@@ -37,7 +37,7 @@ export const deleteUsers = async (id: number) => {
   }
 };
 
-export const getUsersById = async (id: string) => {
+export const getUsersById = async (id: number) => {
   try {
     if (id) {
       const response = await api.get("/users/" + id);

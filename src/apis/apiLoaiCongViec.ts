@@ -47,6 +47,7 @@ export const putLoaiCongViec = async (id:number, payload: LoaiCongViecItem) => {
     }
 }
 
+
 export const deleteLoaiCongViec = async (id?:number) => {
     try {
         const response = await api.delete(`/loai-cong-viec/${id}`);

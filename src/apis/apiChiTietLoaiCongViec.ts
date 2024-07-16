@@ -1,4 +1,4 @@
-import { ChiTietLoaiCongViecViewModel } from "../models/ChiTietLoaiCongViecViewModel";
+import { ChiTietLoaiCongViecViewModel, NhomChiTietLoai } from "../models/ChiTietLoaiCongViecViewModel";
 import api from "./apiUtil";
 
 export const getChiTietLoaiCongViec = async() => {
@@ -73,7 +73,7 @@ export const uploadHinhNhomLoaiCongViec = async (MaNhomLoaiCongViec: number,payl
     }
 }
 
-export const putSuaNhomChiTietLoai = async (id:number, payload?:ChiTietLoaiCongViecViewModel) => {
+export const putSuaNhomChiTietLoai = async (id?:number, payload?:NhomChiTietLoai) => {
     try {
         const response = await api.put(`/chi-tiet-loai-cong-viec/sua-nhom-chi-tiet-loai/${id}`, payload);
         return response.data.content; // chiTietLoaiCongViecViewModel
