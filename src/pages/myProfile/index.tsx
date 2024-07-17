@@ -185,19 +185,7 @@ export default function MyProfile() {
                     theme={{
                       token: {
                         colorText: "rgba(255, 255, 255, 0.88)",
-                        colorBorder: "#333333"
-                        //colorBgElevated: "#333333",
-                      },
-                      components: {
-                        Select: {
-                          selectorBg:"#333333",
-                          optionSelectedColor: "rgba(0, 0, 0, 0.88)",
-                          optionSelectedBg: "rgba(0, 0, 0, 0.88)",
-                          optionActiveBg:"rgba(0, 0, 0, 0.88)",
-                          multipleItemBg:"rgba(0, 0, 0, 0.88)",
-                          multipleItemBorderColor:"#333333",
-                          multipleItemBorderColorDisabled: "#333333",
-                        },
+                        colorBgElevated: "#333333",
                       },
                     }}
                   >

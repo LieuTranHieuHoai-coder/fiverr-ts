@@ -107,6 +107,12 @@ export default function Admin() {
     localStorage.removeItem("currentUser");
     navigate("/login");
   };
+  const [current, setCurrent] = useState(localStorage.getItem("currentKey") || '1');
+  const onClick: MenuProps['onClick'] = (e) => {
+    localStorage.setItem("currentKey", e.key);
+    console.log('click ', e);
+    setCurrent(e.key);
+  };
   return (
     <Layout>
       <Sider
@@ -129,7 +135,7 @@ export default function Admin() {
           </Link>
           <span className="dot">.</span>
         </div>
-        <Menu theme="dark" mode="inline" items={items} />
+        <Menu theme="dark" mode="inline" items={items} selectedKeys={[current]} onClick={onClick} />
       </Sider>
       <Layout>
         <Header style={{ background: "#ffffff", width: "100%" }}>

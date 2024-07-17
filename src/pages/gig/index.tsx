@@ -26,7 +26,7 @@ export default function Gig() {
 
   React.useEffect(() => {
     if (gig?.nguoiTao) {
-      getUsersById(gig.nguoiTao.toString()).then((data) => {
+      getUsersById(gig.nguoiTao).then((data) => {
         setUser(data);
       });
     }

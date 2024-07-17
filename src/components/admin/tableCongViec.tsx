@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Input, Space, Table } from 'antd';
 import type { TableColumnsType } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, RightOutlined } from '@ant-design/icons';
 import { usedanhSachCongViecStore } from '../../store/congviecStore';
 import { CongViecViewModel } from '../../models/CongViecViewModel';
 import dayjs from 'dayjs';
@@ -9,6 +9,7 @@ import { deleteCongViec, getCongViec } from '../../apis/apiCongViec';
 import { PAGE_SIZE } from '../../constants/pagesize';
 import Swal from 'sweetalert2';
 import EditCongViec from './btnEditCongViec';
+import { Link } from 'react-router-dom';
 
 
 export default function TableCongViec() {
@@ -75,7 +76,7 @@ export default function TableCongViec() {
   const columns: TableColumnsType<CongViecViewModel> = [
     {
       title: 'ID',
-      width: 50,
+      width: 30,
       dataIndex: 'id',
       key: "id",
       fixed: 'left',
@@ -91,14 +92,14 @@ export default function TableCongViec() {
     },
     {
       title: 'Đánh giá',
-      width: 70,
+      width: 40,
       dataIndex: 'danhGia',
       key: 'danhGia',
       fixed: 'left',
     },
     {
       title: 'Giá tiền',
-      width: 70,
+      width: 40,
       dataIndex: 'giaTien',
       key: 'giaTien',
       fixed: 'left',
@@ -133,7 +134,7 @@ export default function TableCongViec() {
     // },
     {
       title: 'Sao công việc',
-      width: 70,
+      width: 40,
       dataIndex: 'saoCongViec',
       key: 'saoCongViec',
       fixed: 'left',
@@ -149,12 +150,18 @@ export default function TableCongViec() {
           <div className="flex">
             <div className="mr-2">
               <EditCongViec congViec={item}></EditCongViec>
+            </div>  
+            <div className="mr-2">
+              <Button type="primary" style={{background:"green"}} icon={<RightOutlined />}>
+                <Link to={`/gig/${item.id}`}>Bài viết</Link>
+              </Button>
             </div>
             <div>
               <Button type="primary" danger icon={<DeleteOutlined />} onClick={() => handleDeleteClick(Number(item.id))}>
                 Delete
               </Button>
             </div>
+
           </div>
         </>
       ),
@@ -186,7 +193,7 @@ export default function TableCongViec() {
     );
     setFilteredData(filtered);
   };
-  
+
   return (
     <>
       <div className='mb-5 flex justify-between'>

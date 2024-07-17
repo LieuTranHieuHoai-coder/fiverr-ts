@@ -194,6 +194,7 @@ export default function TableChiTiet() {
       putChiTietLoaiCongViecId(item?.id, item)
         .then(() => {
           getChiTietLoaiCongViec().then((res) => {
+            setFilteredData(res);
             addRanges(res);
           });
           Swal.fire({
@@ -228,6 +229,7 @@ export default function TableChiTiet() {
         deleteChiTietLoaiCongViecId(id)
           .then((res) => {
             getChiTietLoaiCongViec().then((res) => {
+              setFilteredData(res);
               addRanges(res);
             });
             Swal.fire({
@@ -359,7 +361,7 @@ export default function TableChiTiet() {
   const [filteredData, setFilteredData] = React.useState(danhSachChiTiet);
   useEffect(() => {
     setFilteredData(danhSachChiTiet);
-  }, [danhSachChiTiet]);
+  }, [danhSachChiTiet, addNhomLoaiCongViec]);
 
   const [searchText, setSearchText] = React.useState("");
 

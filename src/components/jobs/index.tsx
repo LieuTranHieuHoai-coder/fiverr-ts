@@ -28,7 +28,7 @@ export default function Jobs() {
   return (
     <div>
       <div className="grid xl:grid-cols-4 md:grid-cols-2 xs:grid-cols-1 gap-4">{renderJobs()}</div>
-      <div className="my-5">
+      <div className="m-5 flex items-center justify-center w-full">
         <Pagination
           defaultCurrent={currentPage}
           total={jobs?.totalRow}

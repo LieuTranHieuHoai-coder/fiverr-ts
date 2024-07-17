@@ -7,6 +7,7 @@ import { getUsersById } from "./../../apis/apiNguoiDung";
 import { FaStar } from "react-icons/fa6";
 import { usedanhSachBLStore } from "../../store/commentStore";
 import Swal from "sweetalert2";
+import { useParams } from "react-router-dom";
 type Props = {
   content: BinhLuanViewModel;
 };
@@ -15,20 +16,22 @@ export default function Review(props: Props) {
   const [inputValue, setInputValue] = useState(content.noiDung);
   const [ttUserId, setTTUserId] = useState<ThongTinNguoiDung>();
   const { remove, update } = usedanhSachBLStore();
-  const [currentUser, setUser] = useState<ThongTinNguoiDung>();
-
-  useEffect(() => {
-    if (localStorage.getItem("currentUser") !== "undefined") {
-      setUser(() => {
-        return JSON.parse(localStorage.getItem("currentUser") ?? "null");
-      });
-    }
-  }, []);
+  const {id} = useParams();
+  //const [currentUser, setUser] = useState<ThongTinNguoiDung>();
+  const userLocal = localStorage.getItem("user");
+  const currentUSer = userLocal ? JSON.parse(userLocal) : null;
+  // useEffect(() => {
+  //   if (localStorage.getItem("currentUser") !== "undefined") {
+  //     setUser(() => {
+  //       return JSON.parse(localStorage.getItem("currentUser") ?? "null");
+  //     });
+  //   }
+  // }, []);
 
   useEffect(() => {
     async function flecthUser() {
-      if (localStorage.getItem("currentUser") !== "undefined") {
-        const data = await getUsersById(content.maNguoiBinhLuan);
+      if (localStorage.getItem("user") !== "undefined") {
+        const data = await getUsersById(Number(currentUSer.user.id));
         setTTUserId(data);
       }
     }
@@ -44,6 +47,7 @@ export default function Review(props: Props) {
   }
 
   const updateComment = () => {
+    console.log(content)
     Swal.fire({
       title: "Input something to this comment?",
       input: "text",
@@ -62,6 +66,8 @@ export default function Review(props: Props) {
           Swal.fire("Updated!", "Your comment has been updated.", "success");
           const edit = { ...content };
           edit.noiDung = result.value;
+          edit.maCongViec = Number(id);
+          edit.maNguoiBinhLuan = ttUserId?.id || "";
           putBinhLuan(content.id, edit);
           update(edit);
         }
@@ -91,9 +97,9 @@ export default function Review(props: Props) {
 
   function renderDeleteBtn() {
     if (
-      content.tenNguoiBinhLuan === currentUser?.name &&
-      currentUser !== undefined &&
-      currentUser
+      content.tenNguoiBinhLuan === currentUSer.user.name &&
+      currentUSer !== undefined &&
+      currentUSer
     ) {
       return (
         <button
@@ -109,9 +115,9 @@ export default function Review(props: Props) {
 
   function renderUpdateBtn() {
     if (
-      content.tenNguoiBinhLuan === currentUser?.name &&
-      currentUser !== undefined &&
-      currentUser
+      content.tenNguoiBinhLuan === currentUSer?.user.name &&
+      currentUSer !== undefined &&
+      currentUSer
     ) {
       return (
         <button
