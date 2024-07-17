@@ -132,6 +132,7 @@ export default function TableGroup() {
       setEditId(id);
       setEditTen(tenLoaiCongViec);
     }
+    setEditTen(tenLoaiCongViec || "");
     setOpenMD(true);
   };
 
@@ -187,7 +188,6 @@ export default function TableGroup() {
       >
         <Modal
           title="Chỉnh sửa loại công việc"
-          
           open={openMD}
           onOk={() => handleOk()}
           confirmLoading={confirmLoading}

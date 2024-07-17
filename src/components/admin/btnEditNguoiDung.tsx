@@ -53,7 +53,18 @@ export default function EditNguoiDung(props: Props) {
           timer: 1000,
         });
       } else {
+        const strSkill = values?.skill?.toString() || "";
+        const arr: string[] | undefined = strSkill.split(',') || [];
+        const strCerti = values?.certification?.toString() || "";
+        const arrCerti: string[] | undefined = strCerti.split(',') || [];
+        if(values){
+          values.skill = arr;
+        }
+        if(values){
+          values.certification = arrCerti;
+        }
         await putUsers(Number(nguoiDung?.id), values);
+        
         const res = await getUsers();
         addRanges(res);
         Swal.fire({

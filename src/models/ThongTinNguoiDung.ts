@@ -8,8 +8,8 @@ export interface ThongTinNguoiDung {
   birthday?: string;
   gender?: boolean;
   role?: string;
-  skill?: [];
-  certification?: [];
+  skill?: string[];
+  certification?: string[];
   bookingJob?: [];
 }
 
