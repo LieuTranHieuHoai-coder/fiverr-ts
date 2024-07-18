@@ -1,24 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Breadcrumb, Button, ConfigProvider, Popover, Select, SelectProps } from "antd";
+import { Breadcrumb, Button, Col, ConfigProvider, Form, Input, Popover, Row, Select, SelectProps } from "antd";
 import "./myprofile.scss";
 import { FaPencil } from "react-icons/fa6";
 import image from "../../../public/img/itemmyprofile.png";
 import { HomeOutlined } from "@ant-design/icons";
 import { ThongTinNguoiDung } from "../../models/ThongTinNguoiDung";
-import { uploadAvatar } from "../../apis/apiNguoiDung";
+import { putUsers, uploadAvatar } from "../../apis/apiNguoiDung";
 import { getSkills } from "../../apis/apiSkill";
 import { useNguoiDungStore } from "../../store/userStore";
+import Swal from "sweetalert2";
 
 export default function MyProfile() {
   const currentUser: ThongTinNguoiDung = JSON.parse(localStorage.getItem("currentUser") ?? "");
-  
+  const defaultSkill = currentUser.skill?.toString().replace(/[\[\]" ]/g, '');
+  const defaultCerti = currentUser.certification?.toString().replace(/[\[\]" ]/g, '');
   const { skills, addSkills } = useNguoiDungStore();
-  
+
   useEffect(() => {
-    getSkills().then((res) =>{
+    getSkills().then((res) => {
       addSkills(res);
     });
-  },[]);
+  }, []);
 
   const options: SelectProps['options'] = [];
 
@@ -46,6 +48,29 @@ export default function MyProfile() {
       // Handle non-supported image file selection
       console.log('Please select a PNG, JPG, or SVG image file.');
     }
+  };
+
+
+  const skillsInputRef = useRef<HTMLTextAreaElement>(null);
+  const certificationInputRef = useRef<HTMLTextAreaElement>(null);
+  const updateProfile = async () => {
+    const strSkill = skillsInputRef.current?.value.toString() || "";
+    const arr: string[] | undefined = strSkill.split(',') || [];
+    const strCerti = certificationInputRef?.current?.value.toString() || "";
+    const arrCerti: string[] | undefined = strCerti.split(',') || [];
+    currentUser.skill = arr;
+    currentUser.certification = arrCerti;
+    console.log(currentUser)
+    await putUsers(Number(currentUser?.id), currentUser).then((res) =>{
+      localStorage.setItem("currentUser", JSON.stringify(res));
+    });
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Hoàn tất",
+      showConfirmButton: false,
+      timer: 1000,
+    });
   };
   return (
     <div className="relative m-0 p-0">
@@ -244,7 +269,7 @@ export default function MyProfile() {
                       components: {
                         Select: {
                           optionSelectedColor: "rgba(0, 0, 0, 0.88)",
-                          multipleItemBg:"rgba(255, 255, 0, 0.88)",
+                          multipleItemBg: "rgba(255, 255, 0, 0.88)",
                         },
                       },
                     }}
@@ -256,22 +281,33 @@ export default function MyProfile() {
                     >
                       <div className="flex justify-between align-baseline">
                         <b className="font-bold text-base">Skills</b>
-                        <a href="#" className="text-primary-600 text-base">
+                        <div className="text-primary-600 text-base" onClick={updateProfile}>
                           Add new
-                        </a>
+                        </div>
                       </div>
                       <div className="my-3">
-                        <Select
+                        {/* <Select
                           mode="tags"
                           style={{ width: '100%' }}
                           placeholder="Tags Mode"
                           onChange={handleChange}
                           options={options}
-                        />
+                        /> */}
+                        <Row gutter={16}>
+                          <Col span={24}>
+                            <textarea className="w-full border p-3"
+                              id="skills"
+                              ref={skillsInputRef}
+                              rows={4}
+                              placeholder="skill"
+                              defaultValue={defaultSkill}
+                            />
+                          </Col>
+                        </Row>
                       </div>
-                      <div className="my-3">
+                      {/* <div className="my-3">
                         {currentUser.skill}
-                      </div>
+                      </div> */}
                     </Popover>
                   </ConfigProvider>
                 </div>
@@ -322,12 +358,26 @@ export default function MyProfile() {
                     >
                       <div className="flex justify-between align-baseline">
                         <b className="font-bold text-base">Certification</b>
-                        <a href="#" className="text-primary-600 text-base">
+                        <a href="" className="text-primary-600 text-base" onClick={updateProfile}>
                           Add new
                         </a>
                       </div>
                     </Popover>
                   </ConfigProvider>
+                  <div className="my-3">
+                    <Row gutter={16}>
+                      <Col span={24}>
+                        <textarea
+                          className="w-full border p-3"
+                          rows={4}
+                          ref={certificationInputRef}
+                          placeholder="certification"
+                          defaultValue={defaultCerti}
+                        />
+                      </Col>
+                    </Row>
+                  </div>
+
                 </div>
               </div>
             </section>
